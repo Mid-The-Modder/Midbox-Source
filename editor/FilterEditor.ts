@@ -94,9 +94,12 @@ export class FilterEditor {
                 this._indicators[i].setAttribute("dominant-baseline", "central");
                 this._indicators[i].setAttribute("pointer-events", "none");
                 this._indicators[i].setAttribute("font-weight", "bolder");
+                this._indicators[i].setAttribute("font-family", "B612");
                 this._indicators[i].textContent = "" + (i + 1);
                 this._indicators[i].style.setProperty("display", "none");
-                this._indicators[i].style.setProperty("font-size", "24px");
+                if (String("" + (i + 1)).length > 1) 
+                    this._indicators[i].style.setProperty("font-size", "20px");
+                else this._indicators[i].style.setProperty("font-size", "24px");
                 this._svg.appendChild(this._indicators[i]);
             }
 
@@ -448,7 +451,9 @@ export class FilterEditor {
 
             if (this._larger) {
                 this._indicators[i].style.setProperty("display", "");
-                this._indicators[i].setAttribute("x", "" + (pointX - 7));
+                if (String("" + (i + 1)).length > 1) 
+                    this._indicators[i].setAttribute("x", "" + (pointX - 13));
+                else this._indicators[i].setAttribute("x", "" + (pointX - 7));
                 this._indicators[i].setAttribute("y", "" + (pointY + 2));
             }
         }
@@ -566,7 +571,6 @@ export class FilterEditor {
             }
         }
         return -1;
-
     }
 
     public resetToInitial() {
@@ -575,11 +579,8 @@ export class FilterEditor {
     }
 
     public swapSubfilterIndices(newIndex: number) {
-        if (this._selectedIndex == -1)
-            return;
-
-        if (newIndex >= this._useFilterSettings.controlPointCount)
-            return;
+        if (this._selectedIndex == -1) return;
+        if (newIndex >= this._useFilterSettings.controlPointCount) return;
 
         let tmp: FilterControlPoint = this._useFilterSettings.controlPoints[this._selectedIndex];
         this._useFilterSettings.controlPoints[this._selectedIndex] = this._useFilterSettings.controlPoints[newIndex];
@@ -614,7 +615,6 @@ export class FilterEditor {
             // Never use history here since the swap action is itself history-generating
             this.swapToSettings(this._subFilters[newIndex], false);
         }
-
     }
 
     private _getTargetFilterSettings(instrument: Instrument): FilterSettings {
@@ -630,10 +630,8 @@ export class FilterEditor {
         const instrument: Instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
         const filterSettings: FilterSettings = this._useNoteFilter ? instrument.noteFilter : instrument.eqFilter;
         let displayMods: boolean = (activeMods && !this._larger && (forceModRender || (!this._mouseOver && !this._mouseDragging && !this._mouseDown) ) && this._doc.synth.playing)
-        if (displayMods)
-            this._controlPointPath.style.setProperty("fill", `${ColorConfig.overwritingModSlider}`);
-        else if (!this._larger)
-            this._controlPointPath.style.setProperty("fill", "currentColor");
+        if (displayMods) this._controlPointPath.style.setProperty("fill", `${ColorConfig.overwritingModSlider}`);
+        else if (!this._larger) this._controlPointPath.style.setProperty("fill", "currentColor");
 
         if (this._useFilterSettings != filterSettings && !this._writingMods) {
             this._dragChange = null;
@@ -646,10 +644,8 @@ export class FilterEditor {
         // forcibly maintained at the cursor position.
         if ( displayMods ) {
             this._useFilterSettings = this._getTargetFilterSettings(instrument);
-            if (this._writingMods)
-                this._whenCursorMoved();
-        }
-        else {
+            if (this._writingMods) this._whenCursorMoved();
+        } else {
             this._useFilterSettings = filterSettings;
         }
         if (!this._mouseDown) this._updateCursor();

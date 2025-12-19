@@ -76,7 +76,7 @@ export class RecordingSetupPrompt implements Prompt {
 				"Count-in 1 bar of metronome before recording:",
 				this._metronomeCountIn,
 			),
-			p("If you have a ", a({href: "https://caniuse.com/midi", target: "_blank"}, "compatible browser"), " on a device connected to a MIDI keyboard, you can use it to perform notes in Midbox! You could also buy other things like a Dubler to hum notes into a microphone while wearing headphones."),
+			p("If you have a ", a({href: "https://caniuse.com/midi", target: "_blank"}, "compatible browser"), " on a device connected to a MIDI keyboard, enable this option to perform notes in Midbox! You could also buy other things like a Dubler to hum notes into a microphone while wearing headphones."),
 			label({style: "display: flex; flex-direction: row; align-items: center; height: 2em; margin-top: 0.5em; justify-content: center;"},
 				"Enable MIDI performance:",
 				this._enableMidi,
@@ -146,6 +146,8 @@ export class RecordingSetupPrompt implements Prompt {
 		this._doc.prefs.metronomeCountIn = this._metronomeCountIn.checked;
 		this._doc.prefs.metronomeWhileRecording = this._metronomeWhileRecording.checked;
 		this._doc.prefs.save();
+		// enableMidi may have changed, try registering a MIDI access handler again.
+		this._doc.midiInputHandler.tryRegisteringMidiAccessHandler();
 		this._close();
 	}
 	
@@ -154,7 +156,7 @@ export class RecordingSetupPrompt implements Prompt {
 			this._keyboardLayoutPreview.removeChild(this._keyboardLayoutPreview.firstChild);
 		}
 		const rowLengths: number[] = [12, 12, 11, 10];
-		const scale: ReadonlyArray<boolean> = Config.scales[this._doc.song.scale].flags;
+		const scale: ReadonlyArray<boolean> = this._doc.song.scale == Config.scales.dictionary["Custom Scale"].index ? this._doc.song.scaleCustom : Config.scales[this._doc.song.scale].flags;
 		for (let rowIndex: number = 0; rowIndex < 4; rowIndex++) {
 			const row: HTMLDivElement = div({style: "display: flex;"});
 			this._keyboardLayoutPreview.appendChild(row);

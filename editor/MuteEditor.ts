@@ -5,7 +5,7 @@ import { HTML } from "imperative-html/dist/esm/elements-strict";
 import { ColorConfig } from "./ColorConfig";
 import { ChannelRow } from "./ChannelRow";
 import { InputBox } from "./HTMLWrapper";
-import { ChangeChannelOrder, ChangeChannelNameFromMuteEditor, ChangeRemoveChannel } from "./changes";
+import { ChangeChannelOrder, ChangeChannelName, ChangeRemoveChannel } from "./changes";
 import { Config } from "../synth/SynthConfig";
 import { SongEditor } from "./SongEditor";
 
@@ -15,7 +15,7 @@ export class MuteEditor {
 	private readonly _buttons: HTMLDivElement[] = [];
 	private readonly _channelCounts: HTMLDivElement[] = [];
 	private readonly _channelNameDisplay: HTMLDivElement = HTML.div({ style: `background-color: ${ColorConfig.uiWidgetFocus}; white-space:nowrap; display: none; transform:translate(20px); width: auto; pointer-events: none; position: absolute; border-radius: 0.2em; z-index: 2;`, "color": ColorConfig.primaryText }, "");
-	public readonly _channelNameInput: InputBox = new InputBox(HTML.input({ style: `color: ${ColorConfig.primaryText}; background-color: ${ColorConfig.uiWidgetFocus}; margin-top: -2px; display: none; width: 6em; position: absolute; border-radius: 0.2em; z-index: 2;`, "color": ColorConfig.primaryText }, ""), this._doc, (oldValue: string, newValue: string) => new ChangeChannelNameFromMuteEditor(this._doc, oldValue, newValue));
+	public readonly _channelNameInput: InputBox = new InputBox(HTML.input({ style: `color: ${ColorConfig.primaryText}; background-color: ${ColorConfig.uiWidgetFocus}; margin-top: -2px; display: none; width: 6em; position: absolute; border-radius: 0.2em; z-index: 2;`, "color": ColorConfig.primaryText }, ""), this._doc, (oldValue: string, newValue: string) => new ChangeChannelName(this._doc, oldValue, newValue, true));
 
 	private readonly _channelDropDown: HTMLSelectElement = HTML.select({ style: "width: 0px; left: 19px; height: 19px; position:absolute; opacity:0" },
 		HTML.option({ value: "rename" }, "Rename..."),
@@ -58,7 +58,7 @@ export class MuteEditor {
 	private _channelNameInputWhenInput = (): void => {
 		let newValue = this._channelNameInput.input.value;
 		if (newValue.length > Config.channelNameCharLimit) {
-			this._channelNameInput.input.value = newValue.substring(0, Config.channelNameCharLimit);
+			this._channelNameInput.updateValue(newValue.substring(0, Config.channelNameCharLimit));
 		}
 	}
 
@@ -130,10 +130,9 @@ export class MuteEditor {
 				this._channelNameInput.input.style.setProperty("display", "");
 				this._channelNameInput.input.style.setProperty("transform", this._channelNameDisplay.style.getPropertyValue("transform"));
 				if (this._channelNameDisplay.textContent != null) {
-					this._channelNameInput.input.value = this._channelNameDisplay.textContent;
-				}
-				else {
-					this._channelNameInput.input.value = "";
+					this._channelNameInput.updateValue(this._channelNameDisplay.textContent);
+				} else {
+					this._channelNameInput.updateValue("");
 				}
 				this._channelNameInput.input.select();
 				break;
@@ -160,8 +159,7 @@ export class MuteEditor {
 					for (let channel: number = 0; channel < this._doc.song.pitchChannelCount + this._doc.song.noiseChannelCount; channel++) {
 						this._doc.song.channels[channel].muted = (channel != this._channelDropDownChannel);
 					}
-				}
-				else {
+				} else {
 					for (let channel: number = 0; channel < this._doc.song.pitchChannelCount + this._doc.song.noiseChannelCount; channel++) {
 						this._doc.song.channels[channel].muted = false;
 					}
@@ -177,12 +175,10 @@ export class MuteEditor {
 			}
 			case "chnDelete": {
 				this._doc.record(new ChangeRemoveChannel(this._doc, this._channelDropDownChannel, this._channelDropDownChannel));
-
 				break;
 			}
 		}
-		if (this._channelDropDown.value != "rename")
-			this._editor.refocusStage();
+		if (this._channelDropDown.value != "rename") this._editor.refocusStage();
 
 		this._channelDropDown.selectedIndex = -1;
 	}
@@ -273,7 +269,6 @@ export class MuteEditor {
 
 		if (this._buttons.length != this._doc.song.getChannelCount()) {
 			for (let y: number = this._buttons.length; y < this._doc.song.getChannelCount(); y++) {
-
 				const channelCountText: HTMLDivElement = HTML.div({ class: "noSelection muteButtonText", style: "display: table-cell; -webkit-text-stroke: 1.5px; vertical-align: middle; text-align: center; -webkit-user-select: none; -webkit-touch-callout: none; -moz-user-select: none; -ms-user-select: none; user-select: none; pointer-events: none; width: 12px; height: 20px; transform: translate(0px, 1px);" });
 				const muteButton: HTMLDivElement = HTML.div({ class: "mute-button", title: "Mute (M), Mute All (⇧M), Solo (S), Exclude (⇧S)", style: `display: block; pointer-events: none; width: 16px; height: 20px; transform: translate(2px, 1px);` });
 
@@ -305,7 +300,6 @@ export class MuteEditor {
 					this._channelCounts[y].style.color = ColorConfig.trackEditorBgNoiseDim;
 				else
 					this._channelCounts[y].style.color = ColorConfig.trackEditorBgModDim;
-
 			} else {
 				this._buttons[y].children[0].classList.remove("muted");
 

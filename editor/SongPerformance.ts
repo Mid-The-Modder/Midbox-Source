@@ -67,6 +67,8 @@ export class SongPerformance {
 	}
 	
 	public record(): void {
+		if (this._doc.song.getChannelIsMod(this._doc.channel)) return;
+		
 		this._doc.synth.snapToBar();
 		const playheadBar: number = Math.floor(this._doc.synth.playhead);
 		if (playheadBar != this._doc.bar) {

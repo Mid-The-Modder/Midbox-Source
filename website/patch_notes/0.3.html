@@ -327,8 +327,8 @@
                 </h2>
                 <h3>
                     ‣ Added 10 envelopes. <br>
-                    The new envelopes are: Linear, Rise, Wibble, Mini Tremolo, Full Tripolo, Semi Tripolo, Mini Tripolo, JummBox Blip, LFO, and Custom (Basic). <br>
-                    The Linear/Rise/Wibble envelopes were ported from GoldBox. JummBox Blip was ported from JummBox V2.6. LFO and Custom (Basic) are envelopes unique to Midbox. <br>
+                    The new envelopes are: Linear, Rise, Wibble, Mini Tremolo, Full Tripolo, Semi Tripolo, Mini Tripolo, JummBox Blip, LFO, and Custom. <br>
+                    The Linear/Rise/Wibble envelopes were ported from GoldBox. JummBox Blip was ported from JummBox V2.6. LFO and Custom are envelopes unique to Midbox. <br>
                     <br>
                     ‣ Added a dropdown containing more envelope settings. (JummBox Addition)<br>
                     The only setting in it is a instrument-wide envelope speed. <br>
@@ -336,7 +336,7 @@
                     ‣ Added envelope targets for distortion, bit-crusher, freq-crusher, chorus, and reverb. <br>
                     <br>
                     ‣ Added a dropdown per envelope with settings for customizing their speed individually, envelope stretching boundaries, whether each one is discrete individually, as well as many other fun settings. <br>
-                    There is also an envelope graph which displays the envelope at an adjustable time length for viewing envelope behaviors as settings are changed. <br>
+                    There is also an envelope graph which displays the envelope with adjustable time and height ranges for viewing envelope behaviors as settings are changed. <br>
                     <br>
                     ‣ Ported Slarmoo's Box's 'pitch' envelope type with various new settings to experiment with. Not compatible with drumset envelopes. <br>
                     <br>
@@ -459,25 +459,35 @@
                     <br>
                     ‣ Made the detune envelope work like the pitch shift's for usability. (JummBox Bugfix)<br>
                     <br>
-                    ‣ Fixed an issue where the ModBox Bow envelope had negative values and when used on a pulse width, would make a loud click sound. <br>
+                    ‣ Fixed an issue where the ModBox Bow envelope had negative values and when used on a pulse width, which would make a loud click sound. <br>
                     <br>
-                    ‣ Fixed an issue where if the theme was "BeepBox Competition" the fourth noise channel's notes would appear black. <br>
+                    ‣ Fixed an inconsistency where if the theme was "BeepBox Competition" the fourth noise channel's notes would appear black. <br>
                     <br>
                     ‣ Fixed an issue where spectrums would sometimes sound irregular until edited. <br>
                     <br>
                     ‣ Fixed an issue where if the "keep current pattern selected" preference was enabled, editing the custom chip while the pattern changed would reset what was drawn on the custom chip. <br>
                     <br>
-                    ‣ Fixed drawing on custom chip for mobile users. <br>
+                    ‣ Fixed drawing support on the custom chip canvas for mobile users. <br>
                     <br>
-                    ‣ Fixed an issue where users could not type more than 10 into filter mod point coordinate modulators. (Slarmoo's Box Bugfix) <br>
+                    ‣ Fixed an inconsistency where users could not type more than 10 into filter mod point coordinate modulators. (Slarmoo's Box Bugfix) <br>
                     <br>
-                    ‣ Disabled randomization keybinds on modulator channels; fixes an issue where pressing "Shift+R" on an active modulation channel would corrupt the song. <br>
+                    ‣ Fixed an issue where using the instrument-randomization keybinds on a modulation channel would corrupt the song. <br>
                     <br>
-                    ‣ Fixed an issue where newly added mod channels were not added underneath the currently selected channel. <br>
+                    ‣ Fixed an inconsistency where newly added mod channels were not added underneath the currently selected channel. <br>
                     <br>
-                    ‣ Fixed an issue where pitch shift couldn't be added from the modulator select when not on the instrument. <br>
+                    ‣ Fixed an inconsistency where pitch shift couldn't be added from the modulator select when not on the instrument. <br>
                     <br>
-                    ‣ Fixed an error with the track editor's height. (UltraBox Bugfix)
+                    ‣ Fixed an error with the track editor's height. (UltraBox Bugfix) <br>
+                    <br>
+                    ‣ Fixed an issue where modulating a supersaw's spread would result in errors caused by negative values. (Slarmoo's Box Bugfix) <br>
+                    <br>
+                    ‣ The backspace key no longer works while note recording. <br>
+                    <br>
+                    ‣ Fixed an inconsistency where using the note transposing shortcuts on mod channels would still duplicate the selected patterns in a selection. <br>
+                    <br>
+                    ‣ Fixed an issue where the filter target setting on mod channels was pointing to the wrong tip prompt ID and thus giving out a null prompt. <br>
+                    <br>
+                    ‣ Disabled note recording on mod channels, which is unsupported.
                 </h3>
                 <h1>
                     Changes<br>
@@ -508,18 +518,15 @@
                 <h3>
                     ‣ Finished up the Midbox theme. <br>
                     <br>
-                    ‣ Updated all themes with new colors. <br>
+                    ‣ Updated themes to use properly incrementing channel colors. <br>
                     <br>
-                    ‣ Renamed the 'Mono' theme to 'Poly' and changed its colors slightly. <br>
-                    The old version of Poly (Mono) is an option in the theme select.
+                    ‣ Renamed the 'Mono' theme to 'Poly' and changed its colors slightly.
                 </h3>
                 <h2>
                     Misc
                 </h2>
                 <h3>
                     ‣ Renamed the FM "1⟲ 2⟲ 3⟲ 4⟲" feedback option to "⟲ALL". <br>
-                    <br>
-                    ‣ Changed the echo delay's reach from 2 beats to 4 beats, as well as putting ticks on the slider to indicate each whole beat. <br>
                     <br>
                     ‣ Re-enabled the limit decay/rise options in the limiter settings. <br>
                     <br>
@@ -552,7 +559,11 @@
                     <br>
                     ‣ The default value (the value when first placing a note) for effect and envelope modulators now uses the value set on the instrument. (Slarmoo's Box Change) <br>
                     <br>
-                    ‣ Rounded the 'broke', 'buried', and 'vary' unison's spread values to be possible with custom unisons.
+                    ‣ Rounded the 'broke', 'buried', and 'vary' unison's spread values and 'hold's' sign value to be possible with custom unisons. <br>
+                    <br>
+                    ‣ Increased the maximum filter point count to 12. <br>
+                    <br>
+                    ‣ Pan delay now defaults to 0.
                 </h3>
                 <h6>
                     Removed<br>

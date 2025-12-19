@@ -62,28 +62,28 @@ export class Preferences {
 	}
 	
 	public reload(): void {
-		this.autoPlay = window.localStorage.getItem("autoPlay") == "true";
-		this.autoFollow = window.localStorage.getItem("autoFollow") == "true";
-		this.enableNotePreview = window.localStorage.getItem("enableNotePreview") != "false";
-		this.showFifth = window.localStorage.getItem("showFifth") == "true";
-		this.notesOutsideScale = window.localStorage.getItem("notesOutsideScale") == "true";
-		this.showLetters = window.localStorage.getItem("showLetters") != "false";
-		this.showChannels = window.localStorage.getItem("showChannels") == "true";
-		this.showScrollBar = window.localStorage.getItem("showScrollBar") != "false";
-		this.alwaysFineNoteVol = window.localStorage.getItem("alwaysFineNoteVol") == "true";
-		this.displayVolumeBar = window.localStorage.getItem("displayVolumeBar") != "false";
-		this.instrumentCopyPaste = window.localStorage.getItem("instrumentCopyPaste") != "false";
-		this.enableChannelMuting = window.localStorage.getItem("enableChannelMuting") != "false";
-		this.displayBrowserUrl = window.localStorage.getItem("displayBrowserUrl") != "false";
-		this.pressControlForShortcuts = window.localStorage.getItem("pressControlForShortcuts") == "true";
-		this.enableMidi = window.localStorage.getItem("enableMidi") != "false";
-		this.showRecordButton = window.localStorage.getItem("showRecordButton") == "true";
-		this.snapRecordedNotesToRhythm = window.localStorage.getItem("snapRecordedNotesToRhythm") == "true";
-		this.ignorePerformedNotesNotInScale = window.localStorage.getItem("ignorePerformedNotesNotInScale") == "true";
-		this.metronomeCountIn = window.localStorage.getItem("metronomeCountIn") != "false";
-		this.metronomeWhileRecording = window.localStorage.getItem("metronomeWhileRecording") != "false";
-		this.showOscilloscope = window.localStorage.getItem("showOscilloscope") != "false";
-		this.showEnvReorderButtons = window.localStorage.getItem("showEnvReorderButtons") != "false";
+		this.autoPlay = this._loadBoolean("autoPlay", false);
+		this.autoFollow = this._loadBoolean("autoFollow", false);
+		this.enableNotePreview = this._loadBoolean("enableNotePreview", true);
+		this.showFifth = this._loadBoolean("showFifth", false);
+		this.notesOutsideScale = this._loadBoolean("notesOutsideScale", false);
+		this.showLetters = this._loadBoolean("showLetters", true);
+		this.showChannels = this._loadBoolean("showChannels", false);
+		this.showScrollBar = this._loadBoolean("showScrollBar", true);
+		this.alwaysFineNoteVol = this._loadBoolean("alwaysFineNoteVol", false);
+		this.displayVolumeBar = this._loadBoolean("displayVolumeBar", true);
+		this.instrumentCopyPaste = this._loadBoolean("instrumentCopyPaste", true);
+		this.enableChannelMuting = this._loadBoolean("enableChannelMuting", true);
+		this.displayBrowserUrl = this._loadBoolean("displayBrowserUrl", true);
+		this.pressControlForShortcuts = this._loadBoolean("pressControlForShortcuts", false);
+		this.enableMidi = this._loadBoolean("enableMidi", false);
+		this.showRecordButton = this._loadBoolean("showRecordButton", false);
+		this.snapRecordedNotesToRhythm = this._loadBoolean("snapRecordedNotesToRhythm", true);
+		this.ignorePerformedNotesNotInScale = this._loadBoolean("ignorePerformedNotesNotInScale", false);
+		this.metronomeCountIn = this._loadBoolean("metronomeCountIn", true);
+		this.metronomeWhileRecording = this._loadBoolean("metronomeWhileRecording", true);
+		this.showOscilloscope = this._loadBoolean("showOscilloscope", false);
+		this.showEnvReorderButtons = this._loadBoolean("showEnvReorderButtons", false);
 		this.keyboardLayout = window.localStorage.getItem("keyboardLayout") || "wickiHayden";
 		this.bassOffset = (+(<any>window.localStorage.getItem("bassOffset"))) || 0;
 		this.layout = window.localStorage.getItem("layout") || "small";
@@ -91,25 +91,25 @@ export class Preferences {
 		this.visibleOctaves = ((<any>window.localStorage.getItem("visibleOctaves")) >>> 0) || Preferences.defaultVisibleOctaves;
 
 		// Random Generation Setup
-		this.chipWaveOnRandomization = window.localStorage.getItem("chipWaveOnRandomization") != "false";
-		this.PWMOnRandomization = window.localStorage.getItem("PWMOnRandomization") != "false";
-		this.supersawOnRandomization = window.localStorage.getItem("supersawOnRandomization") != "false";
-		this.harmonicsOnRandomization = window.localStorage.getItem("harmonicsOnRandomization") != "false";
-		this.pickedStringOnRandomization = window.localStorage.getItem("pickedStringOnRandomization") != "false";
-		this.spectrumOnRandomization = window.localStorage.getItem("spectrumOnRandomization") != "false";
-		this.FMOnRandomization = window.localStorage.getItem("FMOnRandomization") != "false";
-		this.ADVFMOnRandomization = window.localStorage.getItem("ADVFMOnRandomization") != "false";
-		this.customChipOnRandomization = window.localStorage.getItem("customChipOnRandomization") != "false";
-		this.noiseOnRandomization = window.localStorage.getItem("noiseOnRandomization") != "false";
-		this.wavetableOnRandomization = window.localStorage.getItem("wavetableOnRandomization") != "false";
-		this.drumSpectrumOnRandomization = window.localStorage.getItem("drumSpectrumOnRandomization") != "false";
-		this.drumNoiseOnRandomization = window.localStorage.getItem("drumNoiseOnRandomization") != "false";
-		this.drumsetOnRandomization = window.localStorage.getItem("drumsetOnRandomization") != "false";
+		this.chipWaveOnRandomization = this._loadBoolean("chipWaveOnRandomization", true);
+		this.PWMOnRandomization = this._loadBoolean("PWMOnRandomization", true);
+		this.supersawOnRandomization = this._loadBoolean("supersawOnRandomization", true);
+		this.harmonicsOnRandomization = this._loadBoolean("harmonicsOnRandomization", true);
+		this.pickedStringOnRandomization = this._loadBoolean("pickedStringOnRandomization", true);
+		this.spectrumOnRandomization = this._loadBoolean("spectrumOnRandomization", true);
+		this.FMOnRandomization = this._loadBoolean("FMOnRandomization", true);
+		this.ADVFMOnRandomization = this._loadBoolean("ADVFMOnRandomization", true);
+		this.customChipOnRandomization = this._loadBoolean("customChipOnRandomization", true);
+		this.noiseOnRandomization = this._loadBoolean("noiseOnRandomization", true);
+		this.wavetableOnRandomization = this._loadBoolean("wavetableOnRandomization", true);
+		this.drumSpectrumOnRandomization = this._loadBoolean("drumSpectrumOnRandomization", true);
+		this.drumNoiseOnRandomization = this._loadBoolean("drumNoiseOnRandomization", true);
+		this.drumsetOnRandomization = this._loadBoolean("drumsetOnRandomization", true);
 		
 		// Keybind Setup
-		this.deactivateCapsLock = window.localStorage.getItem("deactivateCapsLock") != "false";
+		this.deactivateCapsLock = this._loadBoolean("deactivateCapsLock", true);
 		this.CTRLrEvent = window.localStorage.getItem("CTRLrEvent") || "ctrlRtoRandomGenPrompt";
-		this.deactivateBKeybind = window.localStorage.getItem("deactivateBKeybind") != "false";
+		this.deactivateBKeybind = this._loadBoolean("deactivateBKeybind", true);
 		
 
 		const defaultScale: Scale | undefined = Config.scales.dictionary[window.localStorage.getItem("defaultScale")!];
@@ -124,7 +124,7 @@ export class Preferences {
 		}
 		
 		if (window.localStorage.getItem("fullScreen") != null) {
-			if (window.localStorage.getItem("fullScreen") == "true") this.layout = "long";
+			if (this._loadBoolean("fullScreen", false)) this.layout = "long";
 			window.localStorage.removeItem("fullScreen");
 		}
 	}
@@ -181,5 +181,11 @@ export class Preferences {
 		window.localStorage.setItem("deactivateCapsLock", this.deactivateCapsLock ? "true" : "false");
 		window.localStorage.setItem("CTRLrEvent", this.CTRLrEvent);
 		window.localStorage.setItem("deactivateBKeybind", this.deactivateBKeybind ? "true" : "false");
+	}
+
+	private _loadBoolean(name: string, defaultToTrue: boolean) {
+		return defaultToTrue
+			? window.localStorage.getItem(name) != "false"
+			: window.localStorage.getItem(name) == "true";
 	}
 }

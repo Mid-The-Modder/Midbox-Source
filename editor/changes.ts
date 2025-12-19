@@ -1584,10 +1584,10 @@ export class ChangeRandomGeneratedInstrument extends Change {
                             { item: "quasi-sine", weight: 3},
                             { item: "secant", weight: 3},
                             { item: "absine", weight: 3},
-                            { item: "semi-sine", weight: 3},
+                            { item: "semisine", weight: 3},
                             { item: "camelsine", weight: 3},
                             { item: "pulsine", weight: 3},
-                            { item: "shark sine", weight: 3},
+                            { item: "sharksine", weight: 3},
                             { item: "logarithmic saw", weight: 3},
                             { item: "white noise", weight: 3},
                         ])].index;
@@ -1658,10 +1658,10 @@ export class ChangeRandomGeneratedInstrument extends Change {
                                 { item: "quasi-sine", weight: 3},
                                 { item: "secant", weight: 3},
                                 { item: "absine", weight: 3},
-                                { item: "semi-sine", weight: 3},
+                                { item: "semisine", weight: 3},
                                 { item: "camelsine", weight: 3},
                                 { item: "pulsine", weight: 3},
-                                { item: "shark sine", weight: 3},
+                                { item: "sharksine", weight: 3},
                                 { item: "logarithmic saw", weight: 3},
                                 { item: "white noise", weight: 3},
                             ])].index;
@@ -2368,15 +2368,13 @@ export class ChangePerEnvelopeSpeed extends Change {
 }
 
 export class ChangeDrumsetEnvelopeSpeed extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].envelopeSpeed = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.drumsetEnvelopes[drumIndex].envelopeSpeed = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
@@ -2420,15 +2418,13 @@ export class ChangeLowerBound extends Change {
 }
 
 export class ChangeDrumsetLowerBound extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].lowerBound = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.drumsetEnvelopes[drumIndex].lowerBound = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
@@ -2444,15 +2440,13 @@ export class ChangeUpperBound extends Change {
 }
 
 export class ChangeDrumsetUpperBound extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].upperBound = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.drumsetEnvelopes[drumIndex].upperBound = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
@@ -2468,15 +2462,13 @@ export class ChangeEnvelopeDelay extends Change {
 }
 
 export class ChangeDrumsetEnvelopeDelay extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].delay = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.drumsetEnvelopes[drumIndex].delay = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
@@ -2548,15 +2540,13 @@ export class ChangeEnvelopePosition extends Change {
 }
 
 export class ChangeDrumsetEnvelopePosition extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].phase = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.drumsetEnvelopes[drumIndex].phase = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
@@ -2590,21 +2580,31 @@ export class ChangeClapMirrorAmount extends Change {
     constructor(doc: SongDocument, envelopeIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (oldValue != newValue) {
-            instrument.envelopes[envelopeIndex].mirrorAmount = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.envelopes[envelopeIndex].mirrorAmount = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
 export class ChangeDrumsetClapMirrorAmount extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].mirrorAmount = newValue;
+        instrument.drumsetEnvelopes[drumIndex].mirrorAmount = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
+    }
+}
+
+export class ChangeEnvelopeTargetRange extends Change {
+    constructor(doc: SongDocument, envelopeIndex: number, newValue: boolean) {
+        super();
+        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+        const oldValue = instrument.envelopes[envelopeIndex].alternateRange;
+        if (oldValue != newValue) {
+            instrument.envelopes[envelopeIndex].alternateRange = newValue;
             instrument.preset = instrument.type;
             doc.notifier.changed();
             this._didSomething();
@@ -2750,25 +2750,21 @@ export class ChangeEnvelopeAcceleration extends Change {
     constructor(doc: SongDocument, envelopeIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (oldValue != newValue) {
-            instrument.envelopes[envelopeIndex].LFOSettings.LFOAcceleration = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.envelopes[envelopeIndex].LFOSettings.LFOAcceleration = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
 export class ChangeDrumsetEnvelopeAcceleration extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].LFOSettings.LFOAcceleration = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.drumsetEnvelopes[drumIndex].LFOSettings.LFOAcceleration = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
@@ -2776,25 +2772,21 @@ export class ChangeLFOEnvelopePulseWidth extends Change {
     constructor(doc: SongDocument, envelopeIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (oldValue != newValue) {
-            instrument.envelopes[envelopeIndex].LFOSettings.LFOPulseWidth = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.envelopes[envelopeIndex].LFOSettings.LFOPulseWidth = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
 export class ChangeDrumsetLFOEnvelopePulseWidth extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].LFOSettings.LFOPulseWidth = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.drumsetEnvelopes[drumIndex].LFOSettings.LFOPulseWidth = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
@@ -2802,25 +2794,21 @@ export class ChangeLFOEnvelopeTrapezoidRatio extends Change {
     constructor(doc: SongDocument, envelopeIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (oldValue != newValue) {
-            instrument.envelopes[envelopeIndex].LFOSettings.LFOTrapezoidRatio = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.envelopes[envelopeIndex].LFOSettings.LFOTrapezoidRatio = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
 export class ChangeDrumsetLFOEnvelopeTrapezoidRatio extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].LFOSettings.LFOTrapezoidRatio = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.drumsetEnvelopes[drumIndex].LFOSettings.LFOTrapezoidRatio = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
@@ -2828,25 +2816,34 @@ export class ChangeLFOEnvelopeStairsStepAmount extends Change {
     constructor(doc: SongDocument, envelopeIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (oldValue != newValue) {
-            instrument.envelopes[envelopeIndex].LFOSettings.LFOStepAmount = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
+        instrument.envelopes[envelopeIndex].LFOSettings.LFOStepAmount = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
     }
 }
 
 export class ChangeDrumsetLFOEnvelopeStairsStepAmount extends Change {
-    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number, forceUpdate: boolean = false) {
+    constructor(doc: SongDocument, drumIndex: number, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        if (forceUpdate || oldValue != newValue) {
-            instrument.drumsetEnvelopes[drumIndex].LFOSettings.LFOStepAmount = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
+        instrument.drumsetEnvelopes[drumIndex].LFOSettings.LFOStepAmount = newValue;
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
+    }
+}
+
+export class ChangeCustomEnvelopePointHeights extends Change {
+    constructor(doc: SongDocument, envelopeIndex: number, oldArray: number[], newArray: number[]) {
+        super();
+        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+        for (let i = 0; i < instrument.envelopes[envelopeIndex].customEnvGridWidth; i++) {
+            instrument.envelopes[envelopeIndex].customEnvGridPoints[i].height = newArray[i];
         }
+        instrument.preset = instrument.type;
+        doc.notifier.changed();
+        if (oldArray != newArray) this._didSomething();
     }
 }
 
@@ -4721,7 +4718,6 @@ export function pickRandomPresetValue(isNoise: boolean): number {
     const eligiblePresetValues: number[] = [];
     for (let categoryIndex: number = 0; categoryIndex < EditorConfig.presetCategories.length; categoryIndex++) {
         const category: PresetCategory = EditorConfig.presetCategories[categoryIndex];
-        //if (category.name == "Novelty Presets") continue; I wonder why this is here...
         for (let presetIndex: number = 0; presetIndex < category.presets.length; presetIndex++) {
             const preset: Preset = category.presets[presetIndex];
             if (preset.settings != undefined && (preset.isNoise == true) == isNoise) {
@@ -5565,33 +5561,19 @@ export class ChangeSongSubtitle extends Change {
     }
 }
 
-export class ChangeChannelNameFromMuteEditor extends Change {
-    constructor(doc: SongDocument, oldValue: string, newValue: string) {
-        super();
-        if (newValue.length > Config.channelNameCharLimit) {
-            newValue = newValue.substring(0, Config.channelNameCharLimit);
-        }
-
-        doc.song.channels[doc.muteEditorChannel].name = newValue;
-        doc.recalcChannelNames = true;
-
-        doc.notifier.changed();
-        if (oldValue != newValue) this._didSomething();
-    }
-}
-
 export class ChangeChannelName extends Change {
-    constructor(doc: SongDocument, oldValue: string, newValue: string) {
+    constructor(doc: SongDocument, oldValue: string, newValue: string, muteEditor?: boolean) {
         super();
         if (newValue.length > Config.channelNameCharLimit) {
             newValue = newValue.substring(0, Config.channelNameCharLimit);
         }
 
-        doc.song.channels[doc.channel].name = newValue;
+        if (!muteEditor) doc.song.channels[doc.channel].name = newValue;
+        else doc.song.channels[doc.muteEditorChannel].name = newValue;
         doc.recalcChannelNames = true;
 
         doc.notifier.changed();
-        if (oldValue != newValue) this._didSomething();
+        if (oldValue != newValue || newValue == "") this._didSomething();
     }
 }
 
@@ -5798,8 +5780,8 @@ export class RandomEnvelope extends Change {
         }
         // Set early for making sure special-case settings aren't stored in envelopes that can't use them.
         let randomEnvelope: number = Math.floor(Math.random() * (Config.envelopes.length - 1) + 1);
-        // Reroll if basic custom.
-        while (randomEnvelope == Config.envelopes.dictionary["custom (basic)"].index) randomEnvelope = Math.floor(Math.random() * (Config.envelopes.length - 1) + 1);
+        // Reroll if custom.
+        while (randomEnvelope == Config.envelopes.dictionary["custom"].index) randomEnvelope = Math.floor(Math.random() * (Config.envelopes.length - 1) + 1);
         instEnv.target = randomTarget;
         if (
             randomTarget == Config.instrumentAutomationTargets.dictionary["operatorFrequency"].index || 
@@ -5888,9 +5870,10 @@ export class ChangeRemoveEnvelope extends Change {
             instEnv.LFOSettings.LFOPulseWidth = nextEnv.LFOSettings.LFOPulseWidth;
             instEnv.LFOSettings.LFOTrapezoidRatio = nextEnv.LFOSettings.LFOTrapezoidRatio;
             instEnv.LFOSettings.LFOStepAmount = nextEnv.LFOSettings.LFOStepAmount;
-            instEnv.basicCustomGridWidth = nextEnv.basicCustomGridWidth;
-            instEnv.basicCustomGridHeight = nextEnv.basicCustomGridHeight;
-            instEnv.basicCustomGridPoints = nextEnv.basicCustomGridPoints;
+            instEnv.customEnvGridWidth = nextEnv.customEnvGridWidth;
+            instEnv.customEnvGridHeight = nextEnv.customEnvGridHeight;
+            instEnv.customEnvGridPoints = nextEnv.customEnvGridPoints;
+            instEnv.alternateRange = nextEnv.alternateRange;
         }
         // TODO: Shift any envelopes that were targeting other envelope indices after the removed one.
         instrument.preset = instrument.type;
@@ -5961,11 +5944,12 @@ export class ChangeEnvelopeOrder extends Change {
         let env1LFOPulseWidth = instEnv.LFOSettings.LFOPulseWidth;
         let env1LFOTrapezoidRatio = instEnv.LFOSettings.LFOTrapezoidRatio;
         let env1LFOStepAmount = instEnv.LFOSettings.LFOStepAmount;
-        let env1BasicCustomGridWidth = instEnv.basicCustomGridWidth;
-        let env1BasicCustomGridHeight = instEnv.basicCustomGridHeight;
-        let env1BasicCustomGridPoints = instEnv.basicCustomGridPoints;
+        let env1CustomEnvGridWidth = instEnv.customEnvGridWidth;
+        let env1CustomEnvGridHeight = instEnv.customEnvGridHeight;
+        let env1CustomEnvGridPoints = instEnv.customEnvGridPoints;
+        let env1AlternateRange = instEnv.alternateRange;
 
-        let env2Target, env2Index, env2Envelope, env2Speed, env2Discrete, env2LowerBound, env2UpperBound, env2Delay, env2PitchStart, env2PitchEnd, env2PitchAmplify, env2PitchBounce, env2Phase, env2MeasurementType, env2MirrorAmount, env2LFOShape, env2LFOActiveCheckbox, env2LFOAcceleration, env2LFOPulseWidth, env2LFOTrapezoidRatio, env2LFOStepAmount, env2BasicCustomGridWidth, env2BasicCustomGridHeight, env2BasicCustomGridPoints;
+        let env2Target, env2Index, env2Envelope, env2Speed, env2Discrete, env2LowerBound, env2UpperBound, env2Delay, env2PitchStart, env2PitchEnd, env2PitchAmplify, env2PitchBounce, env2Phase, env2MeasurementType, env2MirrorAmount, env2LFOShape, env2LFOActiveCheckbox, env2LFOAcceleration, env2LFOPulseWidth, env2LFOTrapezoidRatio, env2LFOStepAmount, env2CustomEnvGridWidth, env2CustomEnvGridHeight, env2CustomEnvGridPoints, env2AlternateRange;
         if (moveWhere) {
             env2Target = envAbove.target;
             env2Index = envAbove.index;
@@ -5988,9 +5972,10 @@ export class ChangeEnvelopeOrder extends Change {
             env2LFOPulseWidth = envAbove.LFOSettings.LFOPulseWidth;
             env2LFOTrapezoidRatio = envAbove.LFOSettings.LFOTrapezoidRatio;
             env2LFOStepAmount = envAbove.LFOSettings.LFOStepAmount;
-            env2BasicCustomGridWidth = envAbove.basicCustomGridWidth;
-            env2BasicCustomGridHeight = envAbove.basicCustomGridHeight;
-            env2BasicCustomGridPoints = envAbove.basicCustomGridPoints;
+            env2CustomEnvGridWidth = envAbove.customEnvGridWidth;
+            env2CustomEnvGridHeight = envAbove.customEnvGridHeight;
+            env2CustomEnvGridPoints = envAbove.customEnvGridPoints;
+            env2AlternateRange = envAbove.alternateRange;
 
             envAbove.target = env1Target;
             envAbove.index = env1Index;
@@ -6013,9 +5998,10 @@ export class ChangeEnvelopeOrder extends Change {
             envAbove.LFOSettings.LFOPulseWidth = env1LFOPulseWidth;
             envAbove.LFOSettings.LFOTrapezoidRatio = env1LFOTrapezoidRatio;
             envAbove.LFOSettings.LFOStepAmount = env1LFOStepAmount;
-            envAbove.basicCustomGridWidth = env1BasicCustomGridWidth;
-            envAbove.basicCustomGridHeight = env1BasicCustomGridHeight;
-            envAbove.basicCustomGridPoints = env1BasicCustomGridPoints;
+            envAbove.customEnvGridWidth = env1CustomEnvGridWidth;
+            envAbove.customEnvGridHeight = env1CustomEnvGridHeight;
+            envAbove.customEnvGridPoints = env1CustomEnvGridPoints;
+            envAbove.alternateRange = env1AlternateRange;
         } else {
             env2Target = envBelow.target;
             env2Index = envBelow.index;
@@ -6038,9 +6024,10 @@ export class ChangeEnvelopeOrder extends Change {
             env2LFOPulseWidth = envBelow.LFOSettings.LFOPulseWidth;
             env2LFOTrapezoidRatio = envBelow.LFOSettings.LFOTrapezoidRatio;
             env2LFOStepAmount = envBelow.LFOSettings.LFOStepAmount;
-            env2BasicCustomGridWidth = envBelow.basicCustomGridWidth;
-            env2BasicCustomGridHeight = envBelow.basicCustomGridHeight;
-            env2BasicCustomGridPoints = envBelow.basicCustomGridPoints;
+            env2CustomEnvGridWidth = envBelow.customEnvGridWidth;
+            env2CustomEnvGridHeight = envBelow.customEnvGridHeight;
+            env2CustomEnvGridPoints = envBelow.customEnvGridPoints;
+            env2AlternateRange = envBelow.alternateRange;
 
             envBelow.target = env1Target;
             envBelow.index = env1Index;
@@ -6063,9 +6050,10 @@ export class ChangeEnvelopeOrder extends Change {
             envBelow.LFOSettings.LFOPulseWidth = env1LFOPulseWidth;
             envBelow.LFOSettings.LFOTrapezoidRatio = env1LFOTrapezoidRatio;
             envBelow.LFOSettings.LFOStepAmount = env1LFOStepAmount;
-            envBelow.basicCustomGridWidth = env1BasicCustomGridWidth;
-            envBelow.basicCustomGridHeight = env1BasicCustomGridHeight;
-            envBelow.basicCustomGridPoints = env1BasicCustomGridPoints;
+            envBelow.customEnvGridWidth = env1CustomEnvGridWidth;
+            envBelow.customEnvGridHeight = env1CustomEnvGridHeight;
+            envBelow.customEnvGridPoints = env1CustomEnvGridPoints;
+            envBelow.alternateRange = env1AlternateRange;
         }
 
         instEnv.target = env2Target;
@@ -6089,9 +6077,10 @@ export class ChangeEnvelopeOrder extends Change {
         instEnv.LFOSettings.LFOPulseWidth = env2LFOPulseWidth;
         instEnv.LFOSettings.LFOTrapezoidRatio = env2LFOTrapezoidRatio;
         instEnv.LFOSettings.LFOStepAmount = env2LFOStepAmount;
-        instEnv.basicCustomGridWidth = env2BasicCustomGridWidth;
-        instEnv.basicCustomGridHeight = env2BasicCustomGridHeight;
-        instEnv.basicCustomGridPoints = env2BasicCustomGridPoints;
+        instEnv.customEnvGridWidth = env2CustomEnvGridWidth;
+        instEnv.customEnvGridHeight = env2CustomEnvGridHeight;
+        instEnv.customEnvGridPoints = env2CustomEnvGridPoints;
+        instEnv.alternateRange = env2AlternateRange;
         
         doc.notifier.changed();
         this._didSomething();
@@ -6125,11 +6114,11 @@ export class ChangeDrumsetEnvelopeOrder extends Change {
         let env1LFOPulseWidth = drumEnv.LFOSettings.LFOPulseWidth;
         let env1LFOTrapezoidRatio = drumEnv.LFOSettings.LFOTrapezoidRatio;
         let env1LFOStepAmount = drumEnv.LFOSettings.LFOStepAmount;
-        let env1BasicCustomGridWidth = drumEnv.basicCustomGridWidth;
-        let env1BasicCustomGridHeight = drumEnv.basicCustomGridHeight;
-        let env1BasicCustomGridPoints = drumEnv.basicCustomGridPoints;
+        let env1CustomEnvGridWidth = drumEnv.customEnvGridWidth;
+        let env1CustomEnvGridHeight = drumEnv.customEnvGridHeight;
+        let env1CustomEnvGridPoints = drumEnv.customEnvGridPoints;
 
-        let env2Envelope, env2Speed, env2Discrete, env2LowerBound, env2UpperBound, env2Delay, env2Phase, env2MeasurementType, env2MirrorAmount, env2LFOShape, env2LFOActiveCheckbox, env2LFOAcceleration, env2LFOPulseWidth, env2LFOTrapezoidRatio, env2LFOStepAmount, env2BasicCustomGridWidth, env2BasicCustomGridHeight, env2BasicCustomGridPoints;
+        let env2Envelope, env2Speed, env2Discrete, env2LowerBound, env2UpperBound, env2Delay, env2Phase, env2MeasurementType, env2MirrorAmount, env2LFOShape, env2LFOActiveCheckbox, env2LFOAcceleration, env2LFOPulseWidth, env2LFOTrapezoidRatio, env2LFOStepAmount, env2CustomEnvGridWidth, env2CustomEnvGridHeight, env2CustomEnvGridPoints;
         if (moveWhere) {
             env2Envelope = envAbove.envelope;
             env2Speed = envAbove.envelopeSpeed;
@@ -6146,9 +6135,9 @@ export class ChangeDrumsetEnvelopeOrder extends Change {
             env2LFOPulseWidth = envAbove.LFOSettings.LFOPulseWidth;
             env2LFOTrapezoidRatio = envAbove.LFOSettings.LFOTrapezoidRatio;
             env2LFOStepAmount = envAbove.LFOSettings.LFOStepAmount;
-            env2BasicCustomGridWidth = envAbove.basicCustomGridWidth;
-            env2BasicCustomGridHeight = envAbove.basicCustomGridHeight;
-            env2BasicCustomGridPoints = envAbove.basicCustomGridPoints;
+            env2CustomEnvGridWidth = envAbove.customEnvGridWidth;
+            env2CustomEnvGridHeight = envAbove.customEnvGridHeight;
+            env2CustomEnvGridPoints = envAbove.customEnvGridPoints;
 
             envAbove.envelope = env1Envelope;
             envAbove.envelopeSpeed = env1Speed;
@@ -6165,9 +6154,9 @@ export class ChangeDrumsetEnvelopeOrder extends Change {
             envAbove.LFOSettings.LFOPulseWidth = env1LFOPulseWidth;
             envAbove.LFOSettings.LFOTrapezoidRatio = env1LFOTrapezoidRatio;
             envAbove.LFOSettings.LFOStepAmount = env1LFOStepAmount;
-            envAbove.basicCustomGridWidth = env1BasicCustomGridWidth;
-            envAbove.basicCustomGridHeight = env1BasicCustomGridHeight;
-            envAbove.basicCustomGridPoints = env1BasicCustomGridPoints;
+            envAbove.customEnvGridWidth = env1CustomEnvGridWidth;
+            envAbove.customEnvGridHeight = env1CustomEnvGridHeight;
+            envAbove.customEnvGridPoints = env1CustomEnvGridPoints;
         } else {
             env2Envelope = envBelow.envelope;
             env2Speed = envBelow.envelopeSpeed;
@@ -6184,9 +6173,9 @@ export class ChangeDrumsetEnvelopeOrder extends Change {
             env2LFOPulseWidth = envBelow.LFOSettings.LFOPulseWidth;
             env2LFOTrapezoidRatio = envBelow.LFOSettings.LFOTrapezoidRatio;
             env2LFOStepAmount = envBelow.LFOSettings.LFOStepAmount;
-            env2BasicCustomGridWidth = envBelow.basicCustomGridWidth;
-            env2BasicCustomGridHeight = envBelow.basicCustomGridHeight;
-            env2BasicCustomGridPoints = envBelow.basicCustomGridPoints;
+            env2CustomEnvGridWidth = envBelow.customEnvGridWidth;
+            env2CustomEnvGridHeight = envBelow.customEnvGridHeight;
+            env2CustomEnvGridPoints = envBelow.customEnvGridPoints;
 
             envBelow.envelope = env1Envelope;
             envBelow.envelopeSpeed = env1Speed;
@@ -6203,9 +6192,9 @@ export class ChangeDrumsetEnvelopeOrder extends Change {
             envBelow.LFOSettings.LFOPulseWidth = env1LFOPulseWidth;
             envBelow.LFOSettings.LFOTrapezoidRatio = env1LFOTrapezoidRatio;
             envBelow.LFOSettings.LFOStepAmount = env1LFOStepAmount;
-            envBelow.basicCustomGridWidth = env1BasicCustomGridWidth;
-            envBelow.basicCustomGridHeight = env1BasicCustomGridHeight;
-            envBelow.basicCustomGridPoints = env1BasicCustomGridPoints;
+            envBelow.customEnvGridWidth = env1CustomEnvGridWidth;
+            envBelow.customEnvGridHeight = env1CustomEnvGridHeight;
+            envBelow.customEnvGridPoints = env1CustomEnvGridPoints;
         }
 
         drumEnv.envelope = env2Envelope;
@@ -6223,9 +6212,9 @@ export class ChangeDrumsetEnvelopeOrder extends Change {
         drumEnv.LFOSettings.LFOPulseWidth = env2LFOPulseWidth;
         drumEnv.LFOSettings.LFOTrapezoidRatio = env2LFOTrapezoidRatio;
         drumEnv.LFOSettings.LFOStepAmount = env2LFOStepAmount;
-        drumEnv.basicCustomGridWidth = env2BasicCustomGridWidth;
-        drumEnv.basicCustomGridHeight = env2BasicCustomGridHeight;
-        drumEnv.basicCustomGridPoints = env2BasicCustomGridPoints;
+        drumEnv.customEnvGridWidth = env2CustomEnvGridWidth;
+        drumEnv.customEnvGridHeight = env2CustomEnvGridHeight;
+        drumEnv.customEnvGridPoints = env2CustomEnvGridPoints;
         
         doc.notifier.changed();
         this._didSomething();

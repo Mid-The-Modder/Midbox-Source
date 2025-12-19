@@ -815,8 +815,7 @@ export class PatternEditor {
             var modulator = Config.modulators.dictionary["song volume"];
             applyToMods.push(modulator.index);
             if (toApply) applyValues.push(this._doc.continuingModRecordingChange.storedValues![0]);
-        }
-        else if (change instanceof ChangeTempo) {
+        } else if (change instanceof ChangeTempo) {
             var modulator = Config.modulators.dictionary["tempo"];
             applyToMods.push(modulator.index);
             if (toApply) applyValues.push(this._doc.song.tempo - modulator.convertRealFactor);
@@ -1327,7 +1326,6 @@ export class PatternEditor {
 
             // Now, finally, go through all the used patterns/instruments/mods and add appropriate pins
             for (let i: number = 0; i < usedPatterns.length; i++) {
-
                 // When recording filter dots, have a longer minimum duration to lessen the chance of fighting with active morph mods.
                 const addLength: number = (applyToFilterTargets.length == 0) ? 0 : 24;
 

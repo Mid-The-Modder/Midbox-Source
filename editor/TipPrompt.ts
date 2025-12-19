@@ -492,150 +492,132 @@ export class TipPrompt implements Prompt {
 					p("Envelope curves move in the range from 0 to 1 (or vice versa), where 0 means as quiet as possible and 1 is the same as the corresponding position selected in the instrument settings above. If multiple envelopes are targetting the same setting, they are multiplied before applying to the setting."),
 				);
 			} break;
-			case "discreteEnvelope": {
-				message = div(
-					h2("Discrete Envelopes"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. In the case of discrete envelopes, if you used other BeepBox mods, you may be familiar with it being a setting that was global across all other envelopes on the instrument, but Midbox has changed it to be a toggle per instrument. Quality of life!"),
-					p("Envelopes are usually interpolated, meaning they change continuously and smoothly. This setting, when ticked, makes envelopes not interpolate. It's a small difference, but can be helpful for some chip-like sounds or sharper cut-offs."),
-					p("Example, stairs has a slight curve before each 'step'. This is caused by the interpolation. Toggling this makes each stair 'step' cut instantly without the blip. Stuff like this is most noticible with fast envelopes like decelerate.")
-				);
-			} break;
 			case "envelopeSpeed": {
 				message = div(
 					h2("Envelope Speed"),
-					p("This setting controls the speed of all envelopes for the instrument. Each envelope plays at a certain speed, and this slider can scale it to play faster or slower. You can use this to fine-tune a tremolo or how fast something decays to get just the right effect."),
+					p("This setting controls the speed of all envelopes on the instrument. Each envelope plays at a certain speed, and this slider can scale them to play faster or slower. You can use this to fine-tune an instrument's sustain or how fast an automated process runs to get the right effect."),
 				);
 			} break;
-			case "plotterTimeRange": {
+			case "envelopePlotter": {
 				message = div(
 					h2("Envelope Graph"),
-					p("The graph with the line going across it is a visual representation of the envelope type and how its settings affect it. This graph can be useful for learning what each setting does or reviewing your changes."),
-					p("The input box above changes the time range of the graph, allowing you to view a larger portion of the envelope.")
+					p("This graph represents the envelope's values across a span of time. This graph can be useful for learning what each setting does or reviewing your changes."),
+					p("The input boxes around adjust viewing properties of the graph, with the ones to the left controlling the height range while the ones above control the time range. If the ranges are invalid, the graph will display a red line indicating so.")
 				);
 			} break;
 			case "perEnvelopeSpeed": {
 				message = div(
 					h2("Individual Envelope Speed"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously."),
-					p("This setting controls the speed of this envelope as a multiplier. You can use the slider to quickly adjust speeds and the input box for finer speed amounts."),
-					p("The speed of an envelope changes how fast its runs. In BeepBox, this is equivalent to the numbers beside each envelope type's name.")
+					p("This setting controls the speed of this envelope as a multiplier. You can use the knob to quickly adjust speeds and the input box to fine-tune."),
+					p("The speed of an envelope changes how fast its runs. In BeepBox, this is equivalent to the numbers beside each envelope type's name."),
+					p("If you need a table for recreating old envelopes, check out the FaQ page!")
+				);
+			} break;
+			case "discreteEnvelope": {
+				message = div(
+					h2("Discrete Envelope"),
+					p("Envelopes are usually interpolated, meaning they change continuously and linearly. When ticked, this setting makes envelopes not interpolate. It's a small difference, but can be helpful for some chip-like sounds or sharper cut-offs."),
+					p("For instance, the LFO \"stairs\" shape has a slight ramp before each 'step', which is caused by the interpolation. Toggling this makes each 'stair step' cut instantly without those ramps. Stuff like this is most noticible with envelopes that change value really quickly.")
 				);
 			} break;
 			case "envelopeBounds": {
 				message = div(
 					h2("Envelope Boundaries"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects."),
 					p("These two settings stretch the envelope vertically, which can serve many purposes."),
-					p("You can now put a center point for your envelope to play at, adjust its amplitude, and if you have the upper bound lower than the lower bound, invert the envelope, allowing you to swap the 0s and 1s of a tremolo or turn a swell into a twang. The only limit is your imaginiation; get creative!"),
-					p("Just remember: Both bounds being the same number means all envelope values will be the same, and the bounds being very high can result to loud/strange sound artifacts.")
+					p("You can now put a center point for your envelope to play at, adjust its amplitude, and- if you have the upper bound lower than the lower bound- invert the envelope which allows you to swap the 0s and 1s of a tremolo or turn a swell into a twang. The only limit is your imaginiation; get creative!"),
+					p("Just remember: Both bounds being the same value makes all envelope values the same, and if the bounds make the envelope reach very high it can result in loud/strange sound artifacts."),
+					p("If you need a table for recreating old envelopes, check out the FaQ page!")
 				);
 			} break;
 			case "mirrorAmount": {
 				message = div(
-					h2("Amount of Mirrors"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. This setting in specific is unique to Dogebox2's clap envelope."),
-					p("The 'clap' envelope is similar to twang or decay, but it loops around multiple times at the start. These loops are referred to as mirrors, and this setting changes how many loops- or mirrors- the envelope has."),
+					h2("Clap Mirrors"),
+					p("This envelope- ported from Dogebox2- is similar to twang, but it loops around multiple times at the start. These loops are referred to as mirrors, and this setting changes how many mirrors the envelope has."),
 				);
 			} break;
 			case "envelopeDelay": {
 				message = div(
 					h2("Envelope Delay"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously."),
-					p("Envelopes typically will start their behaviors instantly the moment a note plays. With this setting, you can delay when the envelope starts changing values instead for better control over them."),
-					p("Note: Delay is not affected by individual envelope speed.")
-				);
-			} break;
-			case "envelopeDelayPhaseMeasurement": {
-				message = div(
-					h2("Measurement Type"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. This is a subsetting that effects other settings."),
-					p("By default, delay and position are measured in beats. This setting toggles whether delay and position are measured in beats or seconds. This will also change the envelope graph to redisplay the envelope in the selected measurement."),
-				);
-			} break;
-			case "pitchEnvelope": {
-				message = div(
-					h2("Pitch Envelope Type"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. These settings apply specifically to the more-unique envelope type, Pitch."),
-					p("The pitch envelope type is based off of the pitch, or vertical placement of a note. You are able to set the top and bottom boundaries of the pitch envelope using the pitch start and pitch end sliders/input boxes."),
-					p("When a note is placed, the pitch envelope checks where the note is placed and assigns a value between the start and end boundaries according to the note's position in said bounds. There are many things that you can do with key-tracking envelopes, such as making the instrument quieter as notes are placed lower, or dynamic instruments that act more like vocals."),
-					p("And also, if you place the bottom boundary above the top one, you can invert the direction of value incrementation, flipping the top to bottom potential on its head! Go ahead and check out the other pitch-envelope-related settings for some more details on what you can do!"),
-					p("This feature was ported from Slarmoo's Box!")
-				);
-			} break;
-			case "extraPitchEnvSettings": {
-				message = div(
-					h2("Pitch Envelope Amplify/Bounce"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. These settings apply specifically to the more-unique envelope type, Pitch."),
-					p("The pitch envelope type is based off of the pitch, or vertical placement of a note. You are able to set the top and bottom boundaries of the pitch envelope using the pitch start and pitch end sliders/input boxes."),
-					p("For these two settings in specific, they toggle certain interactions when a note's pitch value is more/less than the start/end points, and by default, both of these settings are off meaning pitch values above/below the start/end points will remain capped at their respective upper and lower starting bounds."),
-					p("Amplify will instead proceed to increment the envelope target's value as normal instead of being capped, which can be dangerous when not used cautiously. Bounce will make the pitch value reflect backwards upon being above/below the set points. Try them out for yourself!"),
-					p("The pitch envelope type was ported from Slarmoo's Box!")
+					p("Envelopes normally start their behaviors the moment a note/the song plays. With this setting, you can delay when the envelope starts changing values for better control over them."),
+					p("Note, delay is not affected by individual envelope speed.")
 				);
 			} break;
 			case "envelopePhase": {
 				message = div(
 					h2("Starting Position"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously."),
-					p("This setting allows you to set where in the envelope it starts computing values from."),
+					p("This setting allows you to set where the envelope starts computing values from."),
+				);
+			} break;
+			case "envelopeDelayPhaseMeasurement": {
+				message = div(
+					h2("Measurement Type"),
+					p("By default, delay and position are measured in beats. This setting toggles whether the values of delay and position are utilized in beats or seconds. This will also change the envelope graph to redisplay the envelope in the selected measurement."),
+				);
+			} break;
+			case "pitchEnvelope": {
+				message = div(
+					h2("Pitch Envelope Type"),
+					p("The pitch envelope type is based off of the pitch- or vertical placement- of a note. You are able to set the top and bottom boundaries of the pitch envelope using the pitch start and pitch end knobs/input boxes."),
+					p("When a note is placed, the pitch envelope checks where the note is placed and assigns a value between the start and end boundaries according to the note's position in said bounds. There are many things that you can do with key-tracking envelopes, such as making the instrument quieter as notes are placed lower or dynamic instruments that act more like vocals."),
+					p("If you place the bottom boundary above the top one, you can invert the direction of value incrementation. There's also an extra button that appears on pitch envelopes that looks at your selection of notes and automatically sets the start/end bounds to the lowest and highest notes within it. Check out the other pitch envelope-related settings for more details on what you can do!"),
+					p("The pitch envelope type was ported from Slarmoo's Box!")
+				);
+			} break;
+			case "extraPitchEnvSettings": {
+				message = div(
+					h2("Pitch Envelope Amplify/Bounce"),
+					p("The pitch envelope type is based off of the pitch- or vertical placement- of a note. You are able to set the top and bottom boundaries of the pitch envelope using the pitch start and pitch end knobs/input boxes."),
+					p("For these two checkboxes in specific, they toggle certain interactions when a note's pitch value is more/less than the start/end bounds. By default, both of these settings are off meaning pitch values above/below the start/end points will remain capped at their respective upper and lower starting bounds."),
+					p("Amplify will instead increment the envelope target's value past that value cap (which can be dangerous when not used cautiously). Bounce will make the pitch value reflect backwards upon being above/below the set points. Try them out for yourself!"),
+					p("The pitch envelope type was ported from Slarmoo's Box!")
 				);
 			} break;
 			case "LFOShape": {
 				message = div(
 					h2("LFO Envelope Type"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. These settings are specifically for the LFO envelope type."),
-					p("The LFO envelope type is the upgrade to the tremolo envelope type you may be familiar with from other BeepMods. LFOs are a type of envelope that continously loop a shape, and with this particular setting, you can change the shape of the LFO."),
+					p("The LFO envelope type is the successor to the tremolo envelope type you may be familiar with from other BeepMods. LFOs (or Low Frequency Oscillators) are a type of envelope that continously loop a shape- and with this particular setting- you can change this shape."),
 				);
 			} break;
 			case "LFOAcceleration": {
 				message = div(
 					h2("Acceleration"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously."),
-					p("This setting makes the envelope increase or decrease speed over time. When toggled, an input will appear where you can set the multiplier of the acceleration: Set it under 1 if you want the speed to decrease over time, or above 1 if you want the speed to increase over time."),
+					p("This setting makes the envelope increase or decrease in speed over time. When toggled, an input will appear where you can set the multiplier of the acceleration: Set it under 1 if you want the speed to decrease over time, or above 1 if you want the speed to increase over time."),
 				);
 			} break;
 			case "LFOLoopOnce": {
 				message = div(
 					h2("Loop Once?"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously."),
 					p("This setting toggles whether the envelope continously loops its shape or if it only plays once."),
 				);
 			} break;
 			case "LFOIgnorance": {
 				message = div(
 					h2("Ignorance"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously."),
-					p("By default, the envelope will restart at the beginning of each note. If you wish to remove this behavior and make the envelope constant, enabling this setting will ignore the note bounds, hence the name, and the only time the note will continue to interact with when the envelope plays will be if the envelope has 'delay'."),
+					p("By default, the envelope will restart at the beginning of each note. If you want to make the envelope constantly play across notes, you can enable this setting to ignore the notes- hence the name. The only time notes continue to interact with envelope playback will be if the envelope has \"delay\"."),
 				);
 			} break;
 			case "LFOPulseWidth": {
 				message = div(
 					h2("Pulse Width"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. This setting is only for the pulse LFO shape."),
-					p("The pulse LFO shape mimics the appearance of a pulse width, going up and down in instantaneously. This setting changes the width of this pulse."),
+					p("The pulse LFO shape mimics the appearance of a pulse width, alternating between two values repeatedly. This setting changes the \"width\" of this pulse, or the ratio in alternation."),
 				);
 			} break;
 			case "LFOTrapezoidRatio": {
 				message = div(
 					h2("Trapezoid Ratio"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. This setting is only for the trapezoid LFO shape."),
-					p("The trapezoid LFO shape mimics the appearance of a trapezoid, going up and down in increments and slopes. This setting changes the ratio of the trapezoid's slopes, causing the shape to transform from a triangle at the lowest and a sloped-pulse at the highest."),
+					p("The trapezoid LFO shape mimics the appearance of a trapezoid, alternating between two values in plateaus and slopes. This setting changes the ratio of the trapezoid's slopes to its plateaus, causing the shape to transform from a triangle at its lowest and a sloped-pulse at its highest."),
 				);
 			} break;
 			case "LFOStepAmount": {
 				message = div(
 					h2("Amount of Steps"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. This setting is only for the stairs LFO shape."),
-					p("The trapezoid LFO shape change values in 'steps', mimicing the appearance of stairs. Using this option allows you to configure how many steps the envelope has."),
+					p("The stairs LFO shape changes values in 'steps', mimicing the appearance of stairs. This setting configures how many steps the envelope has."),
 				);
 			} break;
-			case "basicCustomEnvelope": {
+			case "customEnvelope": {
 				message = div(
-					h2("Basic Custom Envelope Type"),
-					p("As you may have seen, there are more settings contained with each envelope's dropdown with various effects. These settings are applied per envelope rather than all of them simultaneously. These settings are for the 'basic' custom envelope type!"),
-					p("This envelope type is- as hinted in the name, a basic custom envelope which allows you to create your own envelope shapes!"),
-					p("The custom envelope grid is the grid with the boxes listed horizontally. It allows you to draw an envelope in steps called 'points'. Drag the colored boxes around the grid and look at the envelope graph to see how each point in the grid interacts with the envelope's shape!"),
-					p("Once you have played with the grid, try the 'connection' buttons below the grid canvas! These buttons change how the envelope grid point above the connection button to the next grid point. The icon on the button represents the current shape of the connection, and are by default linear, but they can be changed to be curved lines, instant steps, and more!"),
-					p("Play with these settings as well as the other settings provided and see what you can make!")
+					h2("Custom Envelope"),
+					p("This envelope type... is unfinished! Wowzers!")
 				);
 			} break;
 			case "usedInstrument": {

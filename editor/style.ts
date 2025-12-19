@@ -132,8 +132,7 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
 
 
 .obtrusive-scrollbars, .obtrusive-scrollbars * {
-	scrollbar-width: thin;
-	scrollbar-color: ${ColorConfig.uiWidgetBackground} ${ColorConfig.editorBackground};
+	scrollbar-width: none;
 }
 .obtrusive-scrollbars::-webkit-scrollbar, .obtrusive-scrollbars *::-webkit-scrollbar {
 	width: 12px;
@@ -656,13 +655,13 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
 .beepboxEditor .mute-button {
 	background: transparent;
 	border: none;
-  padding-right: 0px;
-  padding-left: 0px;
-  box-shadow: none;
+	padding-right: 0px;
+	padding-left: 0px;
+	box-shadow: none;
 }
 
 .beepboxEditor .mute-button:focus {
-  background: transparent;
+  	background: transparent;
 	border: none;
 }
 
@@ -672,31 +671,31 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
 	width: 100%;
 	height: 100%;
 	display: inline-block;
-  background: var(--mute-button-normal);
+  	background: var(--mute-button-normal);
 	-webkit-mask-image: var(--unmuted-symbol);
 	-webkit-mask-repeat: no-repeat;
 	-webkit-mask-position: center;
 	-webkit-mask-size: cover;
-  mask-repeat: no-repeat;
+  	mask-repeat: no-repeat;
 	mask-position: center;
 	mask-size: cover;
-  mask-image: var(--unmuted-symbol);
+  	mask-image: var(--unmuted-symbol);
 }
 
 .beepboxEditor .mute-button.muted::before {
-  background: var(--ui-widget-background);
+ 	 background: var(--ui-widget-background);
 	-webkit-mask-image: var(--muted-symbol);
-  mask-image: var(--muted-symbol);
+  	mask-image: var(--muted-symbol);
 }
 
 .beepboxEditor .mute-button.modMute.muted::before {
-  background: var(--ui-widget-background);
+  	background: var(--ui-widget-background);
 	-webkit-mask-image: var(--muted-symbol);
-  mask-image: var(--muted-symbol);
+  	mask-image: var(--muted-symbol);
 }
 
 .beepboxEditor .mute-button.modMute::before {
-  background: var(--mute-button-mod);
+  	background: var(--mute-button-mod);
 }
 
 
@@ -847,7 +846,7 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
 }
 
 .select2-container .select2-selection--single {
-  height: auto;
+  	height: auto;
 }
 
 .select2-container {
@@ -857,15 +856,15 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
 
 @media (min-width: 711px) {
 	.select2 {
-	  width: calc(var(--settings-area-width) * 0.625) !important;
+	  	width: calc(var(--settings-area-width) * 0.625) !important;
 	}
 }
 
 .select2-container--default .select2-selection--single{
-  border-radius: 0px;
-  border: 0px;
-  background-color: transparent;
-  outline: none;
+	border-radius: 0px;
+	border: 0px;
+	background-color: transparent;
+	outline: none;
 }
 
 .select2-selection__rendered:not(.menu)::before {
@@ -949,7 +948,7 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
     padding-left: 0.1em;
 }
 .select2-container--default .select2-results__option[aria-selected=true] {
-  background-color: transparent !important;
+  	background-color: transparent !important;
 }
 
 .select2-results__option--highlighted[aria-selected] {
@@ -968,7 +967,7 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
 	text-align-last: center;
 }
 .beepboxEditor .settings-area select {
-       width: 100%;
+    width: 100%;
 }
 
 /* This makes it look better in firefox on my computer... What about others?
@@ -1331,7 +1330,7 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
 	overflow: hidden;
 	position: absolute;
 	display: block;
-  cursor: crosshair;
+ 	cursor: crosshair;
 }
 
 @keyframes dash-animation {
@@ -1546,7 +1545,7 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
 }
 
 .beepboxEditor input[type=checkbox] {
-  transform: scale(1.5);
+  	transform: scale(1.5);
 }
 
 .beepboxEditor input[type=range] {
@@ -1559,7 +1558,7 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
 	cursor: pointer;
 	background: none;
 	touch-action: pan-y;
-  position: relative;
+  	position: relative;
 }
 .beepboxEditor input[type=range]:focus {
 	outline: none;
@@ -1585,12 +1584,12 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
     height: 0.5em;
     top: 32%;
     z-index: 1;
-		pointer-events: none;
+	pointer-events: none;
 }
 .beepboxEditor span.modSlider {
 	--mod-position: 20%;
 	--mod-color: ${ColorConfig.overwritingModSlider};
-  --mod-border-radius: 0%;
+  	--mod-border-radius: 0%;
 }
 .beepboxEditor span.modSlider:before {
 	content: "";
@@ -1602,10 +1601,10 @@ document.head.appendChild(HTML.style({ type: "text/css" }, `
     height: 0.8em;
     top: 28%;
     z-index: 2;
-		transform: translate(-50%, 0%);
-		pointer-events: none;
-		border: 40%;
-		border-radius: var(--mod-border-radius);
+	transform: translate(-50%, 0%);
+	pointer-events: none;
+	border: 40%;
+	border-radius: var(--mod-border-radius);
 }
 .beepboxEditor input[type=range]::-webkit-slider-thumb {
 	height: var(--button-size);
@@ -1744,24 +1743,24 @@ li.select2-results__option[role=group] > strong:hover {
 	}
 	
 	.beepboxEditor .soundIcon {
-	  background: ${ColorConfig.editorBackground};
-	  display: inline-block;
-	  height: 10px;
-	  margin-left: 0px;
-	  margin-top: 8px;
+	  	background: ${ColorConfig.editorBackground};
+	  	display: inline-block;
+	  	height: 10px;
+	  	margin-left: 0px;
+	  	margin-top: 8px;
 		position: relative;
 		width: 10px;
 	}
 	.beepboxEditor .soundIcon:before {
-	  border-bottom: 6px solid transparent;
-	  border-top: 6px solid transparent;
-	  border-right: 10px solid ${ColorConfig.editorBackground};
-	  content: "";
-	  height: 10px;
-	  left: 6px;
-	  position: absolute;
-	  top: -6px;
-	  width: 0;
+	  	border-bottom: 6px solid transparent;
+	  	border-top: 6px solid transparent;
+		border-right: 10px solid ${ColorConfig.editorBackground};
+		content: "";
+		height: 10px;
+		left: 6px;
+		position: absolute;
+		top: -6px;
+		width: 0;
 	}
 }
 

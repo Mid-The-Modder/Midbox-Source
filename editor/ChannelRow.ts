@@ -140,16 +140,14 @@ export class ChannelRow {
 				box.setVisibility("hidden");
 			}
 			if (i == this._doc.synth.loopBarStart) {
-				box.setBorderLeft(`1px dashed ${ColorConfig.uiWidgetFocus}`);
-			}
-			else {
-				box.setBorderLeft("none");
+                box.setBorderLeft(`1px dashed ${ColorConfig.uiWidgetFocus}`);
+            } else {
+                box.setBorderLeft("none");
             }
-			if (i == this._doc.synth.loopBarEnd) {
-				box.setBorderLeft(`1px dashed ${ColorConfig.uiWidgetFocus}`);
-			}
-			else {
-				box.setBorderLeft("none");
+            if (i == this._doc.synth.loopBarEnd) {
+                box.setBorderRight(`1px dashed ${ColorConfig.uiWidgetFocus}`);
+            } else {
+                box.setBorderRight("none");
             }
 		}
 	}

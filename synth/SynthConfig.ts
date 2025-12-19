@@ -62,7 +62,7 @@ export const enum EnvelopeType {
     pitch,
     LFO,
     dogebox2Clap,
-    basicCustom,
+    custom,
 }
 
 
@@ -333,7 +333,7 @@ export class Config {
     public static readonly tempoMax:                  number = 750;
     public static readonly octaveMin:                 number = -2;
 	public static readonly octaveMax:                 number = 2;
-    public static readonly echoDelayRange:            number = 48;
+    public static readonly echoDelayRange:            number = 24;
     public static readonly echoDelayStepTicks:        number = 4;
     public static readonly echoDelayMax:              number = 8;
     public static readonly echoDelayIntervals:        number = 0.001;
@@ -470,7 +470,7 @@ export class Config {
     public static readonly filterGainRange:            number = 15;
     public static readonly filterGainCenter:           number = 7;
     public static readonly filterGainStep:             number = 1.0 / 2.0;
-    public static readonly filterMaxPoints:            number = 8;
+    public static readonly filterMaxPoints:            number = 12;
     public static readonly filterTypeNames:            ReadonlyArray<string> = ["low-pass", "high-pass", "peak"]; 
     public static readonly filterMorphCount:           number = 10; 
     public static readonly filterSimpleCutRange:       number = 11;
@@ -505,32 +505,32 @@ export class Config {
     public static readonly wavetableSpeedScale:   ReadonlyArray<number> = [0, 0.25, 0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24];
 
     public static readonly unisons: DictionaryArray<Unison> = toNameMap([
-        { name: "none",            voices: 1, spread: 0.0,      offset:  0.0,    expression: 1.4,  sign:  1.0 },
-        { name: "shimmer",         voices: 2, spread: 0.018,    offset:  0.0,    expression: 0.8,  sign:  1.0 },
-        { name: "hum",             voices: 2, spread: 0.045,    offset:  0.0,    expression: 1.0,  sign:  1.0 },
-        { name: "honky tonk",      voices: 2, spread: 0.09,     offset:  0.0,    expression: 1.0,  sign:  1.0 },
-        { name: "dissonant",       voices: 2, spread: 0.25,     offset:  0.0,    expression: 0.9,  sign:  1.0 },
-        { name: "fifth",           voices: 2, spread: 3.5,      offset:  3.5,    expression: 0.9,  sign:  1.0 },
-        { name: "octave",          voices: 2, spread: 6.0,      offset:  6.0,    expression: 0.8,  sign:  1.0 },
-        { name: "bowed",           voices: 2, spread: 0.02,     offset:  0.0,    expression: 1.0,  sign: -1.0 },
-        { name: "piano",           voices: 2, spread: 0.01,     offset:  0.0,    expression: 1.0,  sign:  0.7 },
-        { name: "warbled",         voices: 2, spread: 0.25,     offset:  0.05,   expression: 0.9,  sign: -0.8 },
-        { name: "hyper",           voices: 2, spread: 0.03,     offset: -0.02,   expression: 0.85, sign:  0.7 },
-        { name: "peak",            voices: 2, spread: 12.038,   offset:  12.01,  expression: 0.85, sign:  0.9 },
-        { name: "deep shift",      voices: 2, spread: 12.03,    offset: -17.01,  expression: 0.85, sign:  1.2 },
-        { name: "broke",           voices: 2, spread: 0.0,      offset: -0.3,    expression: 0.8,  sign:  1.0 },
-        { name: "vary",            voices: 2, spread: 0.002,    offset:  0.0,    expression: 0.85, sign:  1.6 },
-        { name: "energetic",       voices: 2, spread: 6.15,     offset:  6.435,  expression: 0.85, sign:  0.9 },
-        { name: "lone fifth",      voices: 1, spread: 0.0,      offset:  7.0,    expression: 1.4,  sign:  1.0 },
-        { name: "alternate fifth", voices: 2, spread: 2.5,      offset: -2.5,    expression: 0.9,  sign:  1.0 },
-        { name: "offtune",         voices: 2, spread: 0.40,     offset:  0.40,   expression: 0.9,  sign:  1.0 },
-        { name: "hold",            voices: 2, spread: 0.003,    offset:  0.0,    expression: 0.8,  sign: -2.5 },
-        { name: "buried",          voices: 2, spread: 0.036,    offset: -36.0,   expression: 1.4,  sign:  1.0 },
-        { name: "corrupt",         voices: 2, spread: 18.0,     offset:  48.0,   expression: 0.7,  sign:  0.7 },
-        { name: "weird octave",    voices: 2, spread: 5.85,     offset:  5.85,   expression: 0.75, sign:  1.0 },
-        { name: "bent",            voices: 2, spread: 9.5,      offset:  4.5,    expression: 0.8,  sign: -0.6 },
-        { name: "hecking gosh",    voices: 2, spread: 6.25,     offset: -6.0,    expression: 0.8,  sign: -0.7 },
-        { name: "testing unison",  voices: 3, spread: 0.05,     offset:  0.0,    expression: 1.0,  sign:  1.0 },
+        { name: "none",            voices: 1, spread: 0.0,    offset:  0.0,   expression: 1.4,  sign:  1.0 },
+        { name: "shimmer",         voices: 2, spread: 0.018,  offset:  0.0,   expression: 0.8,  sign:  1.0 },
+        { name: "hum",             voices: 2, spread: 0.045,  offset:  0.0,   expression: 1.0,  sign:  1.0 },
+        { name: "honky tonk",      voices: 2, spread: 0.09,   offset:  0.0,   expression: 1.0,  sign:  1.0 },
+        { name: "dissonant",       voices: 2, spread: 0.25,   offset:  0.0,   expression: 0.9,  sign:  1.0 },
+        { name: "fifth",           voices: 2, spread: 3.5,    offset:  3.5,   expression: 0.9,  sign:  1.0 },
+        { name: "octave",          voices: 2, spread: 6.0,    offset:  6.0,   expression: 0.8,  sign:  1.0 },
+        { name: "bowed",           voices: 2, spread: 0.02,   offset:  0.0,   expression: 1.0,  sign: -1.0 },
+        { name: "piano",           voices: 2, spread: 0.01,   offset:  0.0,   expression: 1.0,  sign:  0.7 },
+        { name: "warbled",         voices: 2, spread: 0.25,   offset:  0.05,  expression: 0.9,  sign: -0.8 },
+        { name: "hyper",           voices: 2, spread: 0.03,   offset: -0.02,  expression: 0.85, sign:  0.7 },
+        { name: "peak",            voices: 2, spread: 12.038, offset:  12.01, expression: 0.85, sign:  0.9 },
+        { name: "deep shift",      voices: 2, spread: 12.03,  offset: -17.01, expression: 0.85, sign:  1.2 },
+        { name: "broke",           voices: 2, spread: 0.0,    offset: -0.3,   expression: 0.8,  sign:  1.0 },
+        { name: "vary",            voices: 2, spread: 0.002,  offset:  0.0,   expression: 0.85, sign:  1.6 },
+        { name: "energetic",       voices: 2, spread: 6.15,   offset:  6.435, expression: 0.85, sign:  0.9 },
+        { name: "lone fifth",      voices: 1, spread: 0.0,    offset:  7.0,   expression: 1.4,  sign:  1.0 },
+        { name: "alternate fifth", voices: 2, spread: 2.5,    offset: -2.5,   expression: 0.9,  sign:  1.0 },
+        { name: "offtune",         voices: 2, spread: 0.40,   offset:  0.40,  expression: 0.9,  sign:  1.0 },
+        { name: "hold",            voices: 2, spread: 0.003,  offset:  0.0,   expression: 0.8,  sign: -2.0 },
+        { name: "buried",          voices: 2, spread: 0.036,  offset: -36.0,  expression: 1.4,  sign:  1.0 },
+        { name: "corrupt",         voices: 2, spread: 18.0,   offset:  48.0,  expression: 0.7,  sign:  0.7 },
+        { name: "weird octave",    voices: 2, spread: 5.85,   offset:  5.85,  expression: 0.75, sign:  1.0 },
+        { name: "bent",            voices: 2, spread: 9.5,    offset:  4.5,   expression: 0.8,  sign: -0.6 },
+        { name: "hecking gosh",    voices: 2, spread: 6.25,   offset: -6.0,   expression: 0.8,  sign: -0.7 },
+        { name: "testing unison",  voices: 3, spread: 0.05,   offset:  0.0,   expression: 1.0,  sign:  1.0 },
     ]);
 
     public static readonly effectNames: ReadonlyArray<string> =     ["reverb", "chorus", "panning", "distortion", "bitcrusher", "note filter", "echo", "pitch shift", "detune", "vibrato", "transition type", "chord type", "wavefold", "clipper"];
@@ -686,7 +686,7 @@ export class Config {
         { name: "linear",         type: EnvelopeType.linear,        speed:  32  },
         { name: "rise",           type: EnvelopeType.rise,          speed:  32  },
         { name: "jummbox blip",   type: EnvelopeType.jummboxBlip,   speed:  8   },
-        { name: "custom (basic)", type: EnvelopeType.basicCustom,   speed:  1   },
+        { name: "custom",         type: EnvelopeType.custom,        speed:  1   },
     ]);
     public static readonly drumsetEnvelopes: DictionaryArray<DrumsetEnvelope> = toNameMap([
         { name: "none",           type: EnvelopeType.none,          speed:  0   },
@@ -706,7 +706,7 @@ export class Config {
         { name: "linear",         type: EnvelopeType.linear,        speed:  32  },
         { name: "rise",           type: EnvelopeType.rise,          speed:  32  },
         { name: "jummbox blip",   type: EnvelopeType.jummboxBlip,   speed:  8   },
-        { name: "custom (basic)", type: EnvelopeType.basicCustom,   speed:  1   },
+        { name: "custom",         type: EnvelopeType.custom,        speed:  1   },
     ]);
 
     public static readonly perEnvelopeSpeedMin:        number = 0;
@@ -716,14 +716,14 @@ export class Config {
     public static readonly upperBoundMin:              number = 0;
     public static readonly upperBoundMax:              number = 8;
     public static readonly envelopeDelayMax:           number = 32;
-    public static readonly envelopePhaseMax:           number = this.envelopeDelayMax / 2;
+    public static readonly envelopePhaseMax:           number = 16;
     public static readonly clapMirrorsMax:             number = 32;
     public static readonly LFOAccelerationMin:         number = 0.25;
     public static readonly LFOAccelerationMax:         number = 4;
     public static readonly LFOPulseWidthDefault:       number = 4;
     public static readonly LFOTrapezoidRatioMin:       number = 0.5;
     public static readonly LFOTrapezoidRatioMax:       number = 4;
-    public static readonly LFOStairsStepAmountMax:     number = 64;
+    public static readonly LFOStairsStepAmountMax:     number = 32;
     public static readonly customEnvGridMinWidth:      number = 4;
     public static readonly customEnvGridMaxWidth:      number = 32;
     public static readonly customEnvGridDefaultWidth:  number = 12;

@@ -3,15 +3,16 @@
 import {Config} from "../synth/SynthConfig";
 import {isMobile} from "./EditorConfig";
 import {Pattern, Channel, Song, Synth} from "../synth/synth";
-import { SongRecovery, generateUid, errorAlert } from "./SongRecovery";
-import { ColorConfig } from "./ColorConfig";
-import { Layout } from "./Layout";
-import { SongPerformance } from "./SongPerformance";
-import { Selection } from "./Selection";
-import { Preferences } from "./Preferences";
-import { Change } from "./Change";
-import { ChangeNotifier } from "./ChangeNotifier";
-import { ChangeSong, setDefaultInstruments, discardInvalidPatternInstruments, ChangeHoldingModRecording } from "./changes";
+import {SongRecovery, generateUid, errorAlert} from "./SongRecovery";
+import {ColorConfig} from "./ColorConfig";
+import {Layout} from "./Layout";
+import {SongPerformance} from "./SongPerformance";
+import {MidiInputHandler} from "./MidiInput.js";
+import {Selection} from "./Selection";
+import {Preferences} from "./Preferences";
+import {Change} from "./Change";
+import {ChangeNotifier} from "./ChangeNotifier";
+import {ChangeSong, setDefaultInstruments, discardInvalidPatternInstruments, ChangeHoldingModRecording} from "./changes";
 
 interface HistoryState {
 	canUndo: boolean;
@@ -28,6 +29,7 @@ export class SongDocument {
 	public song: Song;
 	public synth: Synth;
 	public performance: SongPerformance;
+	public midiInputHandler: MidiInputHandler;
 	public readonly notifier: ChangeNotifier = new ChangeNotifier();
 	public readonly selection: Selection = new Selection(this);
 	public readonly prefs: Preferences = new Preferences();
@@ -223,6 +225,7 @@ export class SongDocument {
 		
 		this._validateDocState();
 		this.performance = new SongPerformance(this);
+		this.midiInputHandler = new MidiInputHandler(this);
 	}
 		
 	public toggleDisplayBrowserUrl() {

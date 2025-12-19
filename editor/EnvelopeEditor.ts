@@ -4,7 +4,7 @@ import {InstrumentType, Config, DropdownID} from "../synth/SynthConfig";
 import {Instrument, EnvelopeComputer, LFOShapes} from "../synth/synth";
 import {ColorConfig} from "./ColorConfig";
 import {SongDocument} from "./SongDocument";
-import {ChangeSetEnvelopeTarget, ChangeSetEnvelopeType, ChangeRemoveEnvelope, ChangeEnvelopeOrder, ChangePerEnvelopeSpeed, ChangeDiscreteEnvelope, ChangeLowerBound, ChangeUpperBound, ChangeEnvelopeDelay, ChangePitchEnvelopeStart, ChangePitchEnvelopeEnd, ChangePitchAmplify, ChangePitchBounce, ChangeEnvelopePosition, ChangeMeasurementType, ChangeClapMirrorAmount, ChangeLFOEnvelopeShape, ChangeEnvelopeAccelerationEnabled, ChangeEnvelopeLooping, ChangeEnvelopeIgnorance, ChangeEnvelopeAcceleration, ChangeLFOEnvelopePulseWidth, ChangeLFOEnvelopeTrapezoidRatio, ChangeLFOEnvelopeStairsStepAmount, ChangePasteEnvelope, RandomEnvelope} from "./changes";
+import {ChangeSetEnvelopeTarget, ChangeSetEnvelopeType, ChangeRemoveEnvelope, ChangeEnvelopeOrder, ChangePerEnvelopeSpeed, ChangeDiscreteEnvelope, ChangeLowerBound, ChangeUpperBound, ChangeEnvelopeDelay, ChangePitchEnvelopeStart, ChangePitchEnvelopeEnd, ChangePitchAmplify, ChangePitchBounce, ChangeEnvelopePosition, ChangeMeasurementType, ChangeClapMirrorAmount, ChangeEnvelopeTargetRange, ChangeLFOEnvelopeShape, ChangeEnvelopeAccelerationEnabled, ChangeEnvelopeLooping, ChangeEnvelopeIgnorance, ChangeEnvelopeAcceleration, ChangeLFOEnvelopePulseWidth, ChangeLFOEnvelopeTrapezoidRatio, ChangeLFOEnvelopeStairsStepAmount, ChangePasteEnvelope, RandomEnvelope} from "./changes";
 import {HTML, SVG} from "imperative-html/dist/esm/elements-strict";
 import {Knob} from "./KnobElement";
 import {clamp, remap} from "./UsefulCodingStuff";
@@ -75,7 +75,7 @@ export class EnvelopeLineGraph {
 			const beatNote: number = (x * (timeRangeInBeats - this.lowerRange) + this.lowerRange) * speed;
 			const noteSize: number = (1 - x) * Config.noteSizeMax;
 			const pitch: number = 1;
-			let value = EnvelopeComputer.computeEnvelope(envelope, seconds, beats, beatNote, noteSize, instEnv.lowerBound, instEnv.upperBound, delayInBeats, delayInSeconds, phaseInBeats, phaseInSeconds, pitch, instEnv.mirrorAmount, instEnv.LFOSettings.LFOShape, instEnv.LFOSettings.LFOActiveCheckbox == 1 ? instEnv.LFOSettings.LFOAcceleration : 1, instEnv.LFOSettings.LFOActiveCheckbox == 2 ? true : false, instEnv.LFOSettings.LFOActiveCheckbox == 3 ? true : false, instEnv.LFOSettings.LFOPulseWidth * 5, instEnv.LFOSettings.LFOTrapezoidRatio, LFOStepAmount);
+			let value = EnvelopeComputer.computeEnvelope(envelope, seconds, beats, beatNote, noteSize, instEnv.lowerBound, instEnv.upperBound, delayInBeats, delayInSeconds, phaseInBeats, phaseInSeconds, pitch, instEnv.mirrorAmount, instEnv.LFOSettings.LFOShape, instEnv.LFOSettings.LFOActiveCheckbox == 1 ? instEnv.LFOSettings.LFOAcceleration : 1, instEnv.LFOSettings.LFOActiveCheckbox == 2 ? true : false, instEnv.LFOSettings.LFOActiveCheckbox == 3 ? true : false, instEnv.LFOSettings.LFOPulseWidth * 5, instEnv.LFOSettings.LFOTrapezoidRatio, LFOStepAmount, false);
 			envelopeGraph.push(value);
 		}
 
@@ -168,7 +168,8 @@ export class EnvelopeEditor {
 	private readonly _envelopeMoveUpButtons: HTMLButtonElement[] = [];
 	private readonly _envelopeMoveDownButtons: HTMLButtonElement[] = [];
 	private readonly _pitchEnvAutoBoundButtons: HTMLButtonElement[] = [];
-	private readonly _basicCustomPromptButtons: HTMLButtonElement[] = [];
+	private readonly _customEnvelopePromptButtons: HTMLButtonElement[] = [];
+	private readonly _alternateRangeToggles: HTMLInputElement[] = [];
 	private readonly _LFOShapeSelects: HTMLSelectElement[] = [];
 	private readonly _LFOShapeRows: HTMLElement[] = [];
 	private readonly _LFOEnableAccelerationToggles: HTMLInputElement[] = [];
@@ -199,7 +200,7 @@ export class EnvelopeEditor {
 	private _renderedFMOperatorWaveforms: number[] = [];
 	private _openPerEnvelopeDropdowns: boolean[] = [];
 	
-	constructor(private _doc: SongDocument, private _openPrompt: (name: string, extraNumber?: number) => void) {
+	constructor(private _doc: SongDocument, private _openPrompt: (name: string, extraNumber?: number, extraBoolean?: boolean) => void) {
 		this.container.addEventListener("change", this._onChange);
 		this.container.addEventListener("input", this._onInput);
 		this.container.addEventListener("click", this._onClick);
@@ -239,6 +240,7 @@ export class EnvelopeEditor {
 		const envelopePhaseKnobIndex = this._envelopePhaseKnobs.indexOf(<any> event.target);
 		const clapMirrorAmountInputBoxIndex = this._clapMirrorAmountInputBoxes.indexOf(<any> event.target);
 		const clapMirrorAmountSliderIndex = this._clapMirrorAmountSliders.indexOf(<any> event.target);
+		const alternateRangeToggleIndex =  this._alternateRangeToggles.indexOf(<any> event.target);
 		const LFOEnableAccelerationToggleIndex = this._LFOEnableAccelerationToggles.indexOf(<any> event.target);
 		const LFOLoopOnceToggleIndex = this._LFOLoopOnceToggles.indexOf(<any> event.target);
 		const LFOIgnoranceToggleIndex = this._LFOIgnoranceToggles.indexOf(<any> event.target);
@@ -328,6 +330,9 @@ export class EnvelopeEditor {
 			this._clapMirrorAmountInputBoxes[clapMirrorAmountSliderIndex].value = this._clapMirrorAmountSliders[clapMirrorAmountSliderIndex].value;
 			this._lastChange = new ChangeClapMirrorAmount(this._doc, clapMirrorAmountSliderIndex, instrument.envelopes[clapMirrorAmountSliderIndex].mirrorAmount, +(this._clapMirrorAmountSliders[clapMirrorAmountSliderIndex].value));
 		}
+		if (alternateRangeToggleIndex != -1) {
+			this._doc.record(new ChangeEnvelopeTargetRange(this._doc, alternateRangeToggleIndex, this._alternateRangeToggles[alternateRangeToggleIndex].checked));
+		}
 		if (LFOEnableAccelerationToggleIndex != -1) {
 			this._doc.record(new ChangeEnvelopeAccelerationEnabled(this._doc, LFOEnableAccelerationToggleIndex));
 		}
@@ -338,17 +343,17 @@ export class EnvelopeEditor {
 			this._doc.record(new ChangeEnvelopeIgnorance(this._doc, LFOIgnoranceToggleIndex));
 		}
 		if (LFOAccelerationInputBoxIndex != -1) {
-			this._lastChange = new ChangeEnvelopeAcceleration(this._doc, LFOAccelerationInputBoxIndex, instrument.envelopes[LFOAccelerationInputBoxIndex].phase, +(this._LFOAccelerationInputBoxes[LFOAccelerationInputBoxIndex].value));
+			this._lastChange = new ChangeEnvelopeAcceleration(this._doc, LFOAccelerationInputBoxIndex, instrument.envelopes[LFOAccelerationInputBoxIndex].LFOSettings.LFOAcceleration, +(this._LFOAccelerationInputBoxes[LFOAccelerationInputBoxIndex].value));
 		}
 		if (LFOAccelerationSliderIndex != -1) {
 			this._LFOAccelerationInputBoxes[LFOAccelerationSliderIndex].value = this._LFOAccelerationSliders[LFOAccelerationSliderIndex].value;
-			this._lastChange = new ChangeEnvelopeAcceleration(this._doc, LFOAccelerationSliderIndex, instrument.envelopes[LFOAccelerationSliderIndex].phase, +(this._LFOAccelerationSliders[LFOAccelerationSliderIndex].value));
+			this._lastChange = new ChangeEnvelopeAcceleration(this._doc, LFOAccelerationSliderIndex, instrument.envelopes[LFOAccelerationSliderIndex].LFOSettings.LFOAcceleration, +(this._LFOAccelerationSliders[LFOAccelerationSliderIndex].value));
 		}
 		if (LFOPulseWidthSliderIndex != -1) {
-			this._lastChange = new ChangeLFOEnvelopePulseWidth(this._doc, LFOPulseWidthSliderIndex, instrument.envelopes[LFOPulseWidthSliderIndex].phase, +(this._LFOPulseWidthSliders[LFOPulseWidthSliderIndex].value));
+			this._lastChange = new ChangeLFOEnvelopePulseWidth(this._doc, LFOPulseWidthSliderIndex, instrument.envelopes[LFOPulseWidthSliderIndex].LFOSettings.LFOPulseWidth, +(this._LFOPulseWidthSliders[LFOPulseWidthSliderIndex].value));
 		}
 		if (LFOTrapezoidRatioSliderIndex != -1) {
-			this._lastChange = new ChangeLFOEnvelopeTrapezoidRatio(this._doc, LFOTrapezoidRatioSliderIndex, instrument.envelopes[LFOTrapezoidRatioSliderIndex].phase, +(this._LFOTrapezoidRatioSliders[LFOTrapezoidRatioSliderIndex].value));
+			this._lastChange = new ChangeLFOEnvelopeTrapezoidRatio(this._doc, LFOTrapezoidRatioSliderIndex, instrument.envelopes[LFOTrapezoidRatioSliderIndex].LFOSettings.LFOTrapezoidRatio, +(this._LFOTrapezoidRatioSliders[LFOTrapezoidRatioSliderIndex].value));
 		}
 		if (LFOStairsStepAmountInputBoxIndex != -1) {
 			this._lastChange = new ChangeLFOEnvelopeStairsStepAmount(this._doc, LFOStairsStepAmountInputBoxIndex, instrument.envelopes[LFOStairsStepAmountInputBoxIndex].LFOSettings.LFOStepAmount, +(this._LFOStairsStepAmountInputBoxes[LFOStairsStepAmountInputBoxIndex].value));
@@ -661,14 +666,14 @@ export class EnvelopeEditor {
 		let drumPitchEnvBoolean: boolean = instrument.isNoiseInstrument;
 		
 		for (let envelopeIndex: number = this._rows.length; envelopeIndex < instrument.envelopeCount; envelopeIndex++) {
-			const plotterLowerTimeRangeInput: HTMLInputElement = input({class: "plotterInputBox", style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; width: 8.1em; font-size: 80%; vertical-align: middle;`, id: "lowerTimeRangeInput", type: "number", step: "0.1", min: "0", max: "249.9", value: "0"});
-			const plotterUpperTimeRangeInput: HTMLInputElement = input({class: "plotterInputBox", style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; width: 8.15em; font-size: 80%; margin-left: -2px; vertical-align: middle;`, id: "upperTimeRangeInput", type: "number", step: "0.1", min: "0.1", max: "250", value: "4"});
+			const plotterLowerTimeRangeInput: HTMLInputElement = input({class: "plotterInputBox", style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; width: 8.1em; font-size: 80%; vertical-align: middle;`, id: "lowerTimeRangeInput", type: "number", step: "0.01", min: "0", max: "249.99", value: "0"});
+			const plotterUpperTimeRangeInput: HTMLInputElement = input({class: "plotterInputBox", style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; width: 8.15em; font-size: 80%; margin-left: -2px; vertical-align: middle;`, id: "upperTimeRangeInput", type: "number", step: "0.01", min: "0.01", max: "250", value: "4"});
 			const envelopePlotterRow1: HTMLElement = div({ class: "selectRow dropFader", style: "margin-left: 3px; margin-bottom: 8px; margin-top: -2px;" }, div({},
 				div({ style: "color: " + ColorConfig.secondaryText + "; margin-top: -1px; width: 14.1em;" }, plotterLowerTimeRangeInput, plotterUpperTimeRangeInput),
 			));
-			const plotterLowerHeightInput: HTMLInputElement = input({class: "plotterInputBox", style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; width: 1.25em; height: 2.88em; font-size: 80%;`, id: "lowerHeightInput", type: "number", step: "0.1", min: "0", max: "7.9", value: "0"});
-			const plotterUpperHeightInput: HTMLInputElement = input({class: "plotterInputBox", style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; width: 1.25em; height: 2.87em; font-size: 80%;`, id: "upperHeightInput", type: "number", step: "0.1", min: "0.1", max: "8", value: "1"});
-			const envelopePlotter: EnvelopeLineGraph = new EnvelopeLineGraph(canvas({ width: 160, height: 65, style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; margin-left: -52px;`, id: "EnvelopeLineGraph" }), this._doc, envelopeIndex, false);
+			const plotterLowerHeightInput: HTMLInputElement = input({class: "plotterInputBox", style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; width: 1.25em; height: 2.88em; font-size: 80%;`, id: "lowerHeightInput", type: "number", step: "0.01", min: "0", max: "15.99", value: "0"});
+			const plotterUpperHeightInput: HTMLInputElement = input({class: "plotterInputBox", style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; width: 1.25em; height: 2.87em; font-size: 80%;`, id: "upperHeightInput", type: "number", step: "0.01", min: "0.01", max: "16", value: "1"});
+			const envelopePlotter: EnvelopeLineGraph = new EnvelopeLineGraph(canvas({ width: 160, height: 65, style: `cursor: help; border: 2px solid ${ColorConfig.uiWidgetBackground}; margin-left: -52px;`, id: "EnvelopeLineGraph", onclick: () => this._openPrompt("envelopePlotter") }), this._doc, envelopeIndex, false);
 			const envelopePlotterRow2: HTMLElement = div({class: "selectRow dropFader", style: "margin-left: 3px; margin-top: 16px; margin-bottom: 16px;"}, 
 				div({ style: "display: grid; grid: repeat(2, 33px) / auto-flow; width: 20px; margin-top: -19px;"}, 
 					div({ style: "color: " + ColorConfig.secondaryText + ";" }, plotterUpperHeightInput),
@@ -740,15 +745,6 @@ export class EnvelopeEditor {
 					pitchBounceToggle,
 				)
 			);
-			/*	div({style: "display: flex; flex-direction: column; gap: 5px;"},
-					span({class: "tip", style: "height: 1em; width: 4em;", onclick: () => this._openPrompt("extraPitchEnvSettings")}, span("Amplify:")),
-					div({style: ""}, pitchAmplifyToggle),
-				),
-				div({style: "display: flex; flex-direction: column; gap: 5px;"},
-					span({class: "tip", style: "height: 1em; width: 4em;", onclick: () => this._openPrompt("extraPitchEnvSettings")}, span("Bounce:")),
-					div({style: ""}, pitchBounceToggle),
-				),
-			));*/
 			const envelopePhaseKnob: Knob = new Knob(0, Config.envelopePhaseMax, 0.25, [], 0.25, this._doc, (oldValue: number, newValue: number) => new ChangeEnvelopePosition(this._doc, envelopeIndex, oldValue, newValue));
 			const envelopePhaseInputBox: HTMLInputElement = input({style: "width: 4em; font-size: 80%; ", id: "envelopePhaseInputBox", type: "number", step: "0.01", min: 0, max: Config.envelopePhaseMax, value: "0"});
 			const envelopePhaseColumn: HTMLElement = div({class: "selectRow", style: "display: grid; grid: repeat(3, 24px) / auto-flow; width: 50px; margin-left: 4px;"},
@@ -769,13 +765,16 @@ export class EnvelopeEditor {
 				span({class: "tip", style: "height: 1em; font-size: 12px;", onclick: () => this._openPrompt("mirrorAmount")}, span("‣ Mirrors:")),
 				div({style: `color: ${ColorConfig.secondaryText}; margin-top: -3px;`}, clapMirrorAmountInputBox),
 			), clapMirrorAmountSlider);
+			const alternateRangeToggle: HTMLInputElement = input({style: "width: 1em; padding: 0; flex: 3; transform: scale(1.6);", type: "checkbox"});
 			const LFOShapeSelect: HTMLSelectElement = buildOptions(select(), [
 				"sine (tremolo)",
 				"triangle",
 				"pulses",
 				"sawtooth",
 				"trapezoid",
-				"stairs",
+				"stairs 1",
+				"stairs 2",
+				"tri-stairs",
 				"absine"
 			]);
 			const LFOShapeRow: HTMLElement = div({class: "selectRow"}, span({ class: "tip", onclick: () => this._openPrompt("LFOShape") }, span("‣ Shape:")), div({ class: "selectContainer" }, LFOShapeSelect));
@@ -799,7 +798,7 @@ export class EnvelopeEditor {
 			const LFOAccelerationSlider: HTMLInputElement = input({style: "margin: 0;", type: "range", min: Config.LFOAccelerationMin, max: Config.LFOAccelerationMax, value: "1", step: "0.25"});
 			const LFOAccelerationInputBox: HTMLInputElement = input({style: "width: 4em; font-size: 80%; ", id: "LFOAccelerationInputBox", type: "number", step: "0.01", min: Config.LFOAccelerationMin, max: Config.LFOAccelerationMax, value: "1"});
 			const LFOAccelerationRow: HTMLElement = div({class: "selectRow dropFader", style: "margin-bottom: 4px;"}, div({},
-				span({class: "tip", style: "height: 1em; font-size: 10.5px;", onclick: () => this._openPrompt("LFOAcceleration")}, span("‣ Acceleration:")),
+				span({class: "tip", style: "height: 1em; font-size: 10px;", onclick: () => this._openPrompt("LFOAcceleration")}, span("‣ Acceleration:")),
 				div({style: `color: ${ColorConfig.secondaryText}; margin-top: -3px;`}, LFOAccelerationInputBox),
 			), LFOAccelerationSlider);
 			const LFOPulseWidthSlider: HTMLInputElement = input({style: "margin: 0;", type: "range", min: 0, max: "20", value: "4", step: "1"});
@@ -849,7 +848,7 @@ export class EnvelopeEditor {
 					SVG.path({ d: "M 6 6 L 14 6 L 14 7 L 6 7 L 6 6 M 6 14 L 14 14 L 14 13 L 6 13 L 6 14 M 10 7 L 8.5 8.5 L 9.4 8.5 L 9.4 11.5 L 8.4 11.5 L 10 13 L 11.5 11.5 L 10.6 11.5 L 10.6 8.5 L 11.5 8.5 L 10 7", fill: "currentColor"}),
 				]),
 			);
-			const basicCustomPromptButton: HTMLButtonElement = button({class: "envelope-button", title: "Edit \"Basic Custom\" Envelope", style: "flex: 3;", onclick: () => this._openPrompt("basicCustomEnvelopePrompt", envelopeIndex)}, 
+			const customEnvelopePromptButton: HTMLButtonElement = button({class: "envelope-button", title: "Edit Custom Envelope", style: "flex: 3;", onclick: () => this._openPrompt("customEnvelopePrompt", envelopeIndex, false)}, 
 				// Pencil icon:
 				SVG.svg({ style: "flex-shrink: 0; position: absolute; left: 4px; top: 19%; pointer-events: none;", width: "4em", height: "4em", viewBox: "6 6 24 24"}, [
 					SVG.path({ d: "M12 6 11.8 6.2 13.8 8.2 14 8C14 6.8 13.2 6 12 6M11.5 6.5 11.8 6.8 7.5 11 7.8 11 7.8 11.3 8.1 11.3 8.1 11.6 8.4 11.6 8.4 11.9 8.7 11.9 8.7 12.2 9 12.2 9 12.5 13 8.5 11.5 7 11.8 6.8 13.5 8.5 9 13 7 11 11.5 6.5M7 11 7 13 9 13", fill: "currentColor"}),
@@ -878,11 +877,12 @@ export class EnvelopeEditor {
 			const deleteButton: HTMLButtonElement = button({type: "button", class: "delete-envelope", title: "Remove Envelope"});
 
 			const row: HTMLDivElement = div(
-				div({style: "width: 0; position: absolute; margin-top: 22px;"}, envelopeDropdown),
+				div({style: "width: 0; position: absolute; margin-top: 19px;"}, envelopeDropdown),
 				div({class: "envelope-row", style: "width: 90%; margin-left: 10%; margin-bottom: -2px;"},
 					div({style: "width: 0; flex: 1; margin-right: -4px;"}, envelopeMoveUpButton),
 					div({style: "width: 0; flex: 1; margin-right: -4px;"}, envelopeCopyButton),
 					div({class: "selectContainer", style: "width: 0; flex: 3;"}, targetSelect),
+					div({style: "position: absolute; margin-top: 3px; margin-left: 121.5px;"}, alternateRangeToggle),
 					div({style: "width: 0; flex: 1; margin-right: -4px;"}, deleteButton),
 				), 
 				div({class: "envelope-row", style: "width: 90%; margin-left: 10%;"},
@@ -890,7 +890,7 @@ export class EnvelopeEditor {
 					div({style: "width: 0; flex: 1; margin-right: -4px;"}, envelopePasteButton),
 					div({class: "selectContainer", style: "width: 0; flex: 3;"}, envelopeSelect),
 					div({style: "position: absolute; margin-top: 0px; margin-left: 119px;"}, pitchEnvAutoBoundButton),
-					div({style: "position: absolute; margin-top: 0px; margin-left: 119px;"}, basicCustomPromptButton),
+					div({style: "position: absolute; margin-top: 0px; margin-left: 119px;"}, customEnvelopePromptButton),
 					div({style: "width: 0; flex: 1; margin-right: -4px;"}, randomEnvelopeButton),
 				),
 			envelopeDropdownGroup);
@@ -916,9 +916,6 @@ export class EnvelopeEditor {
 			this._lowerBoundColumns[envelopeIndex] = lowerBoundColumn;
 			this._upperBoundColumns[envelopeIndex] = upperBoundColumn;
 			this._primaryEnvelopeSettingRows[envelopeIndex] = primaryEnvelopeSettingRow;
-			this._LFOStairsStepAmountSliders[envelopeIndex] = LFOStairsStepAmountSlider;
-			this._LFOStairsStepAmountInputBoxes[envelopeIndex] = LFOStairsStepAmountInputBox;
-			this._LFOStairsStepAmountRows[envelopeIndex] = LFOStairsStepAmountRow;
 			this._envelopeDelayKnobs[envelopeIndex] = envelopeDelayKnob;
 			this._envelopeDelayInputBoxes[envelopeIndex] = envelopeDelayInputBox;
 			this._envelopeDelayColumns[envelopeIndex] = envelopeDelayColumn;
@@ -949,7 +946,8 @@ export class EnvelopeEditor {
 			this._envelopeMoveUpButtons[envelopeIndex] = envelopeMoveUpButton;
 			this._envelopeMoveDownButtons[envelopeIndex] = envelopeMoveDownButton;
 			this._pitchEnvAutoBoundButtons[envelopeIndex] = pitchEnvAutoBoundButton;
-			this._basicCustomPromptButtons[envelopeIndex] = basicCustomPromptButton;
+			this._customEnvelopePromptButtons[envelopeIndex] = customEnvelopePromptButton;
+			this._alternateRangeToggles[envelopeIndex] = alternateRangeToggle;
 			this._LFOShapeSelects[envelopeIndex] = LFOShapeSelect;
 			this._LFOShapeRows[envelopeIndex] = LFOShapeRow;
 			this._LFOEnableAccelerationToggles[envelopeIndex] = LFOEnableAccelerationToggle;
@@ -963,6 +961,9 @@ export class EnvelopeEditor {
 			this._LFOPulseWidthRows[envelopeIndex] = LFOPulseWidthRow;
 			this._LFOTrapezoidRatioSliders[envelopeIndex] = LFOTrapezoidRatioSlider;
 			this._LFOTrapezoidRatioRows[envelopeIndex] = LFOTrapezoidRatioRow;
+			this._LFOStairsStepAmountSliders[envelopeIndex] = LFOStairsStepAmountSlider;
+			this._LFOStairsStepAmountInputBoxes[envelopeIndex] = LFOStairsStepAmountInputBox;
+			this._LFOStairsStepAmountRows[envelopeIndex] = LFOStairsStepAmountRow;
 			this._envelopeDropdownGroups[envelopeIndex] = envelopeDropdownGroup;
 			this._envelopeDropdowns[envelopeIndex] = envelopeDropdown;
 			this._targetSelects[envelopeIndex] = targetSelect;
@@ -1005,10 +1006,10 @@ export class EnvelopeEditor {
 		
 		for (let envIdx: number = 0; envIdx < instrument.envelopeCount; envIdx++) {
 			const instEnv = instrument.envelopes[envIdx];
-			this._plotterLowerTimeRangeInputs[envIdx].value = String(clamp(0, 250.9, this._envelopePlotters[envIdx].lowerRange));
-			this._plotterUpperTimeRangeInputs[envIdx].value = String(clamp(0.1, 251, this._envelopePlotters[envIdx].upperRange));
-			this._plotterLowerHeightInputs[envIdx].value = String(clamp(0, 8.9, this._envelopePlotters[envIdx].lowerHeight));
-			this._plotterUpperHeightInputs[envIdx].value = String(clamp(0.1, 9, this._envelopePlotters[envIdx].upperHeight));
+			this._plotterLowerTimeRangeInputs[envIdx].value = String(clamp(0, 250.99, this._envelopePlotters[envIdx].lowerRange));
+			this._plotterUpperTimeRangeInputs[envIdx].value = String(clamp(0.01, 251, this._envelopePlotters[envIdx].upperRange));
+			this._plotterLowerHeightInputs[envIdx].value = String(clamp(0, 16.99, this._envelopePlotters[envIdx].lowerHeight));
+			this._plotterUpperHeightInputs[envIdx].value = String(clamp(0.01, 17, this._envelopePlotters[envIdx].upperHeight));
 			this._envelopePlotters[envIdx].render();
 			this._perEnvelopeSpeedKnobs[envIdx].updateValue(clamp(Config.perEnvelopeSpeedMin, Config.perEnvelopeSpeedMax+1, instEnv.envelopeSpeed));
 			this._perEnvelopeSpeedInputBoxes[envIdx].value = String(clamp(Config.perEnvelopeSpeedMin, Config.perEnvelopeSpeedMax+1, instEnv.envelopeSpeed));
@@ -1047,6 +1048,7 @@ export class EnvelopeEditor {
 			}
 			this._clapMirrorAmountSliders[envIdx].value = String(clamp(1, Config.clapMirrorsMax+1, instEnv.mirrorAmount));
 			this._clapMirrorAmountInputBoxes[envIdx].value = String(clamp(1, Config.clapMirrorsMax+1, instEnv.mirrorAmount));
+			this._alternateRangeToggles[envIdx].checked = instEnv.alternateRange ? true : false;
 			this._LFOShapeSelects[envIdx].selectedIndex = instEnv.LFOSettings.LFOShape;
 			this._LFOEnableAccelerationToggles[envIdx].checked = instEnv.LFOSettings.LFOActiveCheckbox == 1 ? true : false;
 			this._LFOLoopOnceToggles[envIdx].checked = instEnv.LFOSettings.LFOActiveCheckbox == 2 ? true : false;
@@ -1061,15 +1063,16 @@ export class EnvelopeEditor {
 			this._envelopeMoveDownButtons[envIdx].disabled = !(this._doc.prefs.showEnvReorderButtons);
 			this._pitchEnvAutoBoundButtons[envIdx].disabled = !(instEnv.envelope == Config.envelopes.dictionary["pitch"].index);
 			this._pitchEnvAutoBoundButtons[envIdx].style.zIndex = instEnv.envelope == Config.envelopes.dictionary["pitch"].index ? "1" : "0";
-			this._basicCustomPromptButtons[envIdx].disabled = !(instEnv.envelope == Config.envelopes.dictionary["custom (basic)"].index);
-			this._basicCustomPromptButtons[envIdx].style.zIndex = instEnv.envelope == Config.envelopes.dictionary["custom (basic)"].index ? "1" : "0";
+			this._customEnvelopePromptButtons[envIdx].disabled = !(instEnv.envelope == Config.envelopes.dictionary["custom"].index);
+			this._customEnvelopePromptButtons[envIdx].style.zIndex = instEnv.envelope == Config.envelopes.dictionary["custom"].index ? "1" : "0";
 			this._targetSelects[envIdx].value = String(instEnv.target + instEnv.index * Config.instrumentAutomationTargets.length);
 			this._envelopeSelects[envIdx].selectedIndex = instEnv.envelope;
-			this._targetSelects[envIdx].style.minWidth = this._doc.prefs.showEnvReorderButtons ? "" : "116px";
+			this._targetSelects[envIdx].style.minWidth = (this._doc.prefs.showEnvReorderButtons || (instEnv.target == Config.instrumentAutomationTargets.dictionary["unison"].index || instEnv.target == Config.instrumentAutomationTargets.dictionary["pitchShift"].index || instEnv.target == Config.instrumentAutomationTargets.dictionary["detune"].index /*||instEnv.target == Config.instrumentAutomationTargets.dictionary["panning"].index*/)) ? "" : "116px";
+			this._targetSelects[envIdx].style.maxWidth = (instEnv.target == Config.instrumentAutomationTargets.dictionary["unison"].index || instEnv.target == Config.instrumentAutomationTargets.dictionary["pitchShift"].index || instEnv.target == Config.instrumentAutomationTargets.dictionary["detune"].index /*||instEnv.target == Config.instrumentAutomationTargets.dictionary["panning"].index*/) ? this._doc.prefs.showEnvReorderButtons ? "61px" : "88px" : "";
 			this._targetSelects[envIdx].style.marginLeft = this._doc.prefs.showEnvReorderButtons ? "" : "-27px";
 			this._envelopeCopyButtons[envIdx].style.marginLeft = this._doc.prefs.showEnvReorderButtons ? "" : "-27px";
-			this._envelopeSelects[envIdx].style.minWidth = (this._doc.prefs.showEnvReorderButtons || (instEnv.envelope == Config.envelopes.dictionary["pitch"].index || instEnv.envelope == Config.envelopes.dictionary["custom (basic)"].index)) ? "" : "116px";
-			this._envelopeSelects[envIdx].style.maxWidth = (instEnv.envelope == Config.envelopes.dictionary["pitch"].index || instEnv.envelope == Config.envelopes.dictionary["custom (basic)"].index) ? this._doc.prefs.showEnvReorderButtons ? "61px" : "88px" : "";
+			this._envelopeSelects[envIdx].style.minWidth = (this._doc.prefs.showEnvReorderButtons || (instEnv.envelope == Config.envelopes.dictionary["pitch"].index || instEnv.envelope == Config.envelopes.dictionary["custom"].index)) ? "" : "116px";
+			this._envelopeSelects[envIdx].style.maxWidth = (instEnv.envelope == Config.envelopes.dictionary["pitch"].index || instEnv.envelope == Config.envelopes.dictionary["custom"].index) ? this._doc.prefs.showEnvReorderButtons ? "61px" : "88px" : "";
 			this._envelopeSelects[envIdx].style.marginLeft = this._doc.prefs.showEnvReorderButtons ? "" : "-27px";
 			this._envelopePasteButtons[envIdx].style.marginLeft = this._doc.prefs.showEnvReorderButtons ? "" : "-27px";
 			
@@ -1095,20 +1098,26 @@ export class EnvelopeEditor {
 				this._perEnvelopeSpeedColumns[envIdx].style.display = "grid";
 			}
 
-			if ( // Special case on primary settings.
-				instEnv.envelope == Config.envelopes.dictionary["none"].index
+			if ( // Spacing on primary settings.
+				instEnv.envelope == Config.envelopes.dictionary["none"].index ||
+				instEnv.envelope == Config.envelopes.dictionary["pitch"].index ||
+				instEnv.envelope == Config.envelopes.dictionary["note size"].index
 			) {
-				this._primaryEnvelopeSettingRows[envIdx].style.display = "none";
-			} else { 
-				this._primaryEnvelopeSettingRows[envIdx].style.display = "";
-				if ( // Spacing.
-					instEnv.envelope == Config.envelopes.dictionary["pitch"].index ||
-					instEnv.envelope == Config.envelopes.dictionary["note size"].index
-				) {
-					this._primaryEnvelopeSettingRows[envIdx].style.marginBottom = "49px";
-				} else {
-					this._primaryEnvelopeSettingRows[envIdx].style.marginBottom = "42px";
+				this._primaryEnvelopeSettingRows[envIdx].style.marginBottom = "49px";
+				if (instEnv.envelope == Config.envelopes.dictionary["none"].index) {
+					this._lowerBoundColumns[envIdx].style.display = "none";
+					this._discreteEnvelopeColumns[envIdx].style.display = "none";
+					this._upperBoundColumns[envIdx].style.marginLeft = "75px";
+				} else { 
+					this._lowerBoundColumns[envIdx].style.display = "grid";
+					this._discreteEnvelopeColumns[envIdx].style.display = "grid";
+					this._upperBoundColumns[envIdx].style.marginLeft = "0px";
 				}
+			} else { 
+				this._primaryEnvelopeSettingRows[envIdx].style.marginBottom = "42px";
+				this._lowerBoundColumns[envIdx].style.display = "grid";
+				this._discreteEnvelopeColumns[envIdx].style.display = "grid";
+				this._upperBoundColumns[envIdx].style.marginLeft = "0px";
 			}
 
 			if ( // Special case on mirror amount.
@@ -1137,6 +1146,17 @@ export class EnvelopeEditor {
 				this._pitchEnvelopeSettingRows[envIdx].style.display = "none";
 			}
 
+			if ( // Special case on alternate range toggles.
+				instEnv.target == Config.instrumentAutomationTargets.dictionary["unison"].index ||
+            	instEnv.target == Config.instrumentAutomationTargets.dictionary["pitchShift"].index ||
+            	instEnv.target == Config.instrumentAutomationTargets.dictionary["detune"].index /*||
+            	instEnv.target == Config.instrumentAutomationTargets.dictionary["panning"].index */
+			) {
+				this._alternateRangeToggles[envIdx].style.display = "";
+			} else {
+				this._alternateRangeToggles[envIdx].style.display = "none";
+			}
+
 			if ( // LFO settings are special-cased to the LFO envelope.
 				instEnv.envelope == Config.envelopes.dictionary["LFO"].index
 			) {
@@ -1160,8 +1180,12 @@ export class EnvelopeEditor {
 				} else {
 					this._LFOTrapezoidRatioRows[envIdx].style.display = "none";
 				}
-				// Step amount is special-cased to the "stairs" LFO shape.
-				if (instEnv.LFOSettings.LFOShape == LFOShapes.Stairs) { 
+				// Step amount is special-cased to any stair-like LFO shape.
+				if (
+					instEnv.LFOSettings.LFOShape == LFOShapes.Stairs ||
+					instEnv.LFOSettings.LFOShape == LFOShapes.Stairs2 ||
+					instEnv.LFOSettings.LFOShape == LFOShapes.TriStairs 
+				) { 
 					this._LFOStairsStepAmountRows[envIdx].style.display = "";
 				} else {
 					this._LFOStairsStepAmountRows[envIdx].style.display = "none";
